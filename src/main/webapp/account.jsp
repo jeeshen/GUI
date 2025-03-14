@@ -4,7 +4,7 @@
 <html>
     <%@ include file="header.jsp" %>
     <body>
-    <body class="bg-white font-sans">
+    <body class="bg-white font-inter pb-150">
     <div class="mt-30 flex justify-center p-4">
         <div class="w-full max-w-md mt-4">
             <h1 class="text-4xl font-bold text-center mb-8">ACCOUNT</h1>

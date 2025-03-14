@@ -9,6 +9,9 @@
         @theme {
             --font-inter: "Inter", sans-serif;
         }
+        body {
+            margin-bottom: 50%;
+        }
     </style>
 </head>
 <div class="flex justify-between mb-10">
@@ -25,5 +28,5 @@
     </div>
 </div>
 <div class="fixed bottom-0 inset-0 bg-black flex justify-center z-[-1]">
-    <img src="images/logo2.png" class="w-100 h-auto object-contain fixed bottom-0">
+    <img src="images/logo2.png" class="w-100 h-auto object-contain">
 </div>
