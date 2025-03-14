@@ -25,5 +25,5 @@
     </div>
 </div>
 <div class="fixed bottom-0 inset-0 bg-black flex justify-center z-[-1]">
-    <img src="images/logo2.png" class="w-100 h-auto object-contain mt-270">
+    <img src="images/logo2.png" class="w-100 h-auto object-contain fixed bottom-0">
 </div>
