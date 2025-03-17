@@ -3,49 +3,129 @@
 <html>
 <%@ include file="components/header.jsp" %>
 <body class="bg-white font-inter pb-150">
+<%
+    // 使用 JSP 检查当前显示的是登录还是注册页面
+    String currentTab = request.getParameter("tab");
+    if (currentTab == null) {
+        currentTab = "signin"; // 默认显示登录页面
+    }
+
+    // 检查表单提交
+    String formAction = request.getParameter("formAction");
+    if (formAction != null) {
+        if ("signin".equals(formAction)) {
+            // 在这里处理登录逻辑
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
+            String remember = request.getParameter("remember");
+
+            // 这里添加你的验证和登录处理代码
+            // 例如：
+            /*
+            if (email != null && password != null) {
+                // 验证用户
+                boolean isValid = validateUser(email, password);
+                if (isValid) {
+                    // 创建会话
+                    session.setAttribute("user", email);
+                    // 重定向到主页或控制面板
+                    response.sendRedirect("dashboard.jsp");
+                    return;
+                } else {
+                    // 设置错误消息
+                    request.setAttribute("errorMessage", "Invalid email or password");
+                }
+            }
+            */
+
+        } else if ("register".equals(formAction)) {
+            // 在这里处理注册逻辑
+            String email = request.getParameter("email");
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
+            String confirmPassword = request.getParameter("confirmPassword");
+
+            // 这里添加你的验证和注册处理代码
+            // 例如：
+            /*
+            if (email != null && username != null && password != null && confirmPassword != null) {
+                if (!password.equals(confirmPassword)) {
+                    request.setAttribute("errorMessage", "Passwords do not match");
+                } else {
+                    // 注册用户
+                    boolean isRegistered = registerUser(email, username, password);
+                    if (isRegistered) {
+                        // 注册成功，重定向到登录页面
+                        response.sendRedirect("account.jsp?tab=signin&registered=true");
+                        return;
+                    } else {
+                        request.setAttribute("errorMessage", "Registration failed. Please try again.");
+                    }
+                }
+            }
+            */
+        }
+    }
+
+    // 检查是否刚刚注册成功
+    String registered = request.getParameter("registered");
+    boolean justRegistered = "true".equals(registered);
+%>
+
 <div class="mt-30 flex justify-center p-4">
     <div class="w-full max-w-md mt-4">
         <h1 class="text-4xl font-bold text-center mb-8">ACCOUNT</h1>
 
-        <!-- Tabs -->
+        <!-- 标签 -->
         <div class="flex border-b border-gray-200 mb-8">
-            <button id="signin-tab" class="flex-1 py-3 font-bold text-center border-b-2 border-black">SIGN IN</button>
-            <button id="register-tab" class="flex-1 py-3 font-bold text-center">REGISTER</button>
+            <a href="?tab=signin" class="flex-1 py-3 font-bold text-center <%= "signin".equals(currentTab) ? "border-b-2 border-black" : "" %>">SIGN IN</a>
+            <a href="?tab=register" class="flex-1 py-3 font-bold text-center <%= "register".equals(currentTab) ? "border-b-2 border-black" : "" %>">REGISTER</a>
         </div>
 
-        <!-- Sign In Content -->
-        <div id="signin-content" class="block">
+        <% if (request.getAttribute("errorMessage") != null) { %>
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            <%= request.getAttribute("errorMessage") %>
+        </div>
+        <% } %>
+
+        <% if (justRegistered) { %>
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+            Registration successful! Please sign in with your new account.
+        </div>
+        <% } %>
+
+        <!-- 登录内容 -->
+        <div id="signin-content" class="<%= "signin".equals(currentTab) ? "block" : "hidden" %>">
             <div class="text-center mb-6">
                 <p class="font-bold">WELCOME BACK.</p>
                 <p>Sign in with your email and password.</p>
             </div>
 
-            <form>
-                <div class="float-label-input mb-6">
-                    <input type="email" id="email" placeholder="Email">
-                    <label for="email">Email</label>
-                </div>
+            <form action="<%= request.getRequestURI() %>" method="post">
+                <input type="hidden" name="formAction" value="signin">
+                <input type="hidden" name="tab" value="signin">
 
-                <div class="float-label-input mb-6 relative">
-                    <input type="password" id="password" placeholder="Password" class="w-full">
-                    <label for="password">Password</label>
-                    <button type="button" id="togglePassword" class="absolute right-2 top-1/2 transform -translate-y-1/2 hidden">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                            <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
-                    </button>
-                </div>
+                <label class="floating-label block w-[448px] mb-6">
+                    <span>Email</span>
+                    <input type="text" name="email" placeholder="Email"
+                           class="cursor-text appearance-none bg-white align-middle whitespace-nowrap w-[448px] h-[40px] border border-gray-300 shadow-[inset_0_1px_rgba(0,0,0,0.1),inset_0_-1px_rgba(255,255,255,0.1)] rounded-md flex-shrink px-3 text-sm inline-flex items-center gap-2 relative" />
+                </label>
+
+                <label class="floating-label block w-[448px] mb-6">
+                    <span>Password</span>
+                    <input type="password" name="password" placeholder="Password"
+                           class="cursor-text appearance-none bg-white align-middle whitespace-nowrap w-[448px] h-[40px] border border-gray-300 shadow-[inset_0_1px_rgba(0,0,0,0.1),inset_0_-1px_rgba(255,255,255,0.1)] rounded-md flex-shrink px-3 text-sm inline-flex items-center gap-2 relative" />
+                </label>
 
                 <div class="mb-4">
-                    <a href="#" class="text-black group inline-flex items-center">
+                    <a href="forgotpassword.jsp" class="text-black group inline-flex items-center">
                         <span>Forgot password?</span>
-                        <span class="transition-transform duration-200 ease-in-out transform group-hover:translate-x-1 ml-1">›</span>
+                        <span class="ml-1">›</span>
                     </a>
                 </div>
 
                 <div class="flex items-center mb-6">
-                    <input type="checkbox" id="remember" class="mr-2">
+                    <input type="checkbox" name="remember" id="remember" class="mr-2">
                     <label for="remember">Remember me (optional)</label>
                 </div>
 
@@ -53,8 +133,8 @@
             </form>
         </div>
 
-        <!-- Register Content -->
-        <div id="register-content" class="hidden">
+        <!-- 注册内容 -->
+        <div id="register-content" class="<%= "register".equals(currentTab) ? "block" : "hidden" %>">
             <div class="mb-6">
                 <p>Create an account and benefit from a more personal shopping experience, and quicker online checkout.</p>
             </div>
@@ -63,168 +143,54 @@
                 <p>By proceeding, you consent to receive an SMS for the purpose of verification and to continue with the account creation process.</p>
             </div>
 
-            <form>
-                <div class="float-label-input mb-6">
-                    <input type="text" id="register-email" placeholder="Email">
-                    <label for="email">Email</label>
-                </div>
+            <form action="<%= request.getRequestURI() %>" method="post">
+                <input type="hidden" name="formAction" value="register">
+                <input type="hidden" name="tab" value="register">
 
-                <div class="float-label-input mb-6">
-                    <input type="text" id="username" placeholder="Username">
-                    <label for="username">Username</label>
-                </div>
+                <label class="floating-label block w-[448px] mb-6">
+                    <span>Email</span>
+                    <input type="text" name="email" placeholder="Email"
+                           class="cursor-text appearance-none bg-white align-middle whitespace-nowrap w-[448px] h-[40px] border border-gray-300 shadow-[inset_0_1px_rgba(0,0,0,0.1),inset_0_-1px_rgba(255,255,255,0.1)] rounded-md flex-shrink px-3 text-sm inline-flex items-center gap-2 relative" />
+                </label>
 
-                <div class="float-label-input mb-6">
-                    <input type="password" id="register-password" placeholder="Password">
-                    <label for="register-password">Password</label>
-                    <button type="button" id="toggleRegisterPassword" class="absolute right-2 top-1/2 transform -translate-y-1/2 hidden">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                            <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
-                    </button>
-                </div>
+                <label class="floating-label block w-[448px] mb-6">
+                    <span>Username</span>
+                    <input type="text" name="username" placeholder="Username"
+                           class="cursor-text appearance-none bg-white align-middle whitespace-nowrap w-[448px] h-[40px] border border-gray-300 shadow-[inset_0_1px_rgba(0,0,0,0.1),inset_0_-1px_rgba(255,255,255,0.1)] rounded-md flex-shrink px-3 text-sm inline-flex items-center gap-2 relative" />
+                </label>
 
-                <div class="float-label-input mb-6">
-                    <input type="password" id="register-password-confirm" placeholder="<PASSWORD>">
-                    <label for="register-password-confirm">Confirm Password</label>
-                    <button type="button" id="toggleRegisterPasswordConfirm" class="absolute right-2 top-1/2 transform -translate-y-1/2 hidden">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                            <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
-                    </button>
-                </div>
+                <label class="floating-label block w-[448px] mb-6">
+                    <span>Password</span>
+                    <input type="password" name="password" placeholder="Password"
+                           class="cursor-text appearance-none bg-white align-middle whitespace-nowrap w-[448px] h-[40px] border border-gray-300 shadow-[inset_0_1px_rgba(0,0,0,0.1),inset_0_-1px_rgba(255,255,255,0.1)] rounded-md flex-shrink px-3 text-sm inline-flex items-center gap-2 relative" />
+                </label>
 
-                <button type="submit" class="w-full bg-black text-white py-4 font-bold uppercase tracking-wider">Register</button>
+                <label class="floating-label block w-[448px] mb-6">
+                    <span>Confirm Password</span>
+                    <input type="password" name="confirmPassword" placeholder="Confirm Password"
+                           class="cursor-text appearance-none bg-white align-middle whitespace-nowrap w-[448px] h-[40px] border border-gray-300 shadow-[inset_0_1px_rgba(0,0,0,0.1),inset_0_-1px_rgba(255,255,255,0.1)] rounded-md flex-shrink px-3 text-sm inline-flex items-center gap-2 relative" />
+                </label>
+
+                <button type="submit" class="w-full bg-black text-white py-4 font-bold uppercase tracking-wider">REGISTER</button>
             </form>
         </div>
     </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Tab switching logic
-        const signinTab = document.getElementById('signin-tab');
-        const registerTab = document.getElementById('register-tab');
-        const signinContent = document.getElementById('signin-content');
-        const registerContent = document.getElementById('register-content');
-
-        if (signinTab && registerTab && signinContent && registerContent) {
-            signinTab.addEventListener('click', function() {
-                // Add border to signin tab, remove from register tab
-                signinTab.classList.add('border-b-2', 'border-black');
-                registerTab.classList.remove('border-b-2', 'border-black');
-
-                // Show signin content, hide register content
-                signinContent.classList.remove('hidden');
-                signinContent.classList.add('block');
-                registerContent.classList.add('hidden');
-                registerContent.classList.remove('block');
-            });
-
-            registerTab.addEventListener('click', function() {
-                // Add border to register tab, remove from signin tab
-                registerTab.classList.add('border-b-2', 'border-black');
-                signinTab.classList.remove('border-b-2', 'border-black');
-
-                // Show register content, hide signin content
-                registerContent.classList.remove('hidden');
-                registerContent.classList.add('block');
-                signinContent.classList.add('hidden');
-                signinContent.classList.remove('block');
-            });
-        }
-
-        // 使用通用函数设置密码切换功能
-        setupPasswordToggle('password', 'togglePassword');
-        setupPasswordToggle('register-password', 'toggleRegisterPassword');
-        setupPasswordToggle('register-password-confirm', 'toggleRegisterPasswordConfirm');
-    });
-
-    function setupPasswordToggle(inputId, buttonId) {
-        const input = document.getElementById(inputId);
-        const button = document.getElementById(buttonId);
-
-        if (input && button) {
-            // 初始状态设置 - 如果输入框已有值，显示切换按钮
-            if (input.value && input.value.length > 0) {
-                button.classList.remove('hidden');
-            } else {
-                button.classList.add('hidden');
-            }
-
-            // 输入监听事件
-            input.addEventListener('input', function() {
-                if (this.value.length > 0) {
-                    button.classList.remove('hidden');
-                } else {
-                    button.classList.add('hidden');
-                }
-            });
-
-            // 切换按钮点击事件
-            button.addEventListener('click', function() {
-                if (input.type === 'password') {
-                    input.type = 'text';
-                    this.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <line x1="1" y1="1" x2="23" y2="23"></line>
-                    </svg>
-                `;
-                } else {
-                    input.type = 'password';
-                    this.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                        <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                `;
-                }
-            });
-        }
+<%-- 可以创建一个单独的 JSP 文件来处理业务逻辑，如下 --%>
+<%!
+    // 在这里可以定义方法
+    /*
+    private boolean validateUser(String email, String password) {
+        // 实现验证逻辑
+        return true; // 示例
     }
-</script>
+
+    private boolean registerUser(String email, String username, String password) {
+        // 实现注册逻辑
+        return true; // 示例
+    }
+    */
+%>
 </body>
-<style>
-    .float-label-input {
-        position: relative;
-    }
-
-    .float-label-input input {
-        width: 100%;
-        height: 40px;
-        padding-top: 20px;
-        border: none;
-        border-bottom: 1px solid #d1d5db;
-        outline: none;
-    }
-
-    .float-label-input label {
-        position: absolute;
-        top: 10px;
-        left: 0;
-        font-size: 16px;
-        color: #6b7280;
-        transition: all 0.3s ease;
-        pointer-events: none;
-    }
-
-    .float-label-input input:focus {
-        border-bottom-color: #000;
-    }
-
-    .float-label-input input:focus + label,
-    .float-label-input input:not(:placeholder-shown) + label {
-        top: 0px;
-        font-size: 12px;
-        color: #000;
-    }
-
-    .float-label-input input::placeholder {
-        opacity: 0;
-    }
-</style>
 </html>
