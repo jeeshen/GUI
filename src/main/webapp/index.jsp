@@ -39,5 +39,24 @@
             </div>
             <% } %>
         </div>
+        <p class="w-1/2 text-black-500 font-inter text-2xl font-bold pl-30 mt-30 mb-5">Why choose us. <span class="text-gray-500">Even more reasons to shop with us.</span></p>
+        <div class="flex justify-left gap-8 mx-30">
+            <div class="relative shadow-2xl w-80 h-60 rounded-[1rem] transition duration-300 ease-in-out hover:scale-103 p-5 px-7">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-credit-card size-12 text-green-500"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+                <p class="text-2xl font-semibold mt-3">Pay 0% interest for up <br/>to 25 months.</p>
+            </div>
+            <div class="relative shadow-2xl w-80 h-60 rounded-[1rem] transition duration-300 ease-in-out hover:scale-103 p-5 px-7">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-truck size-12 text-blue-500"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>
+                <p class="text-2xl font-semibold mt-3">Get <span class="text-blue-500">free delivery</span> or <br/><span class="text-blue-500">pick up </span>available item <br/>at nearby store.</p>
+            </div>
+            <div class="relative shadow-2xl w-80 h-60 rounded-[1rem] transition duration-300 ease-in-out hover:scale-103 p-5 px-7">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gem size-12 text-purple-500"><path d="M6 3h12l4 6-10 13L2 9Z"/><path d="M11 3 8 9l4 13 4-13-3-6"/><path d="M2 9h20"/></svg>
+                <p class="text-2xl font-semibold mt-3">Great <span class="text-purple-500">quality</span> and <br/>super long <span class="text-purple-500">life span</span>.</p>
+            </div>
+            <div class="relative shadow-2xl w-80 h-60 rounded-[1rem] transition duration-300 ease-in-out hover:scale-103 p-5 px-7">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-thumbs-up size-12 text-blue-500"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg>
+                <p class="text-2xl font-semibold mt-3">Quick <span class="text-blue-500">customer service</span> and easy <span class="text-blue-500">warranty process</span>.</p>
+            </div>
+        </div>
     </body>
 </html>
