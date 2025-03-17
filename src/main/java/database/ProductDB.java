@@ -13,6 +13,7 @@ public class ProductDB {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
+            System.out.println(conn);
             pstmt.setString(1, product.getName());
             pstmt.setString(2, product.getDescription());
             pstmt.setDouble(3, product.getPrice());

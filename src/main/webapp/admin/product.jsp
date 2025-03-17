@@ -7,7 +7,7 @@
       <div class="modal-box" style="width: 350px">
       <h3 class="text-lg font-bold flex justify-center">Adding Product</h3>
         <div class="flex justify-center">
-          <form method="post" action="admin/ProductServlet" enctype="multipart/form-data" class="w-full">
+          <form method="post" action="${pageContext.request.contextPath}/ProductServlet" enctype="multipart/form-data">
             <fieldset class="fieldset">
               <legend class="fieldset-legend">Product Name</legend>
               <input type="text" class="input" name="name" placeholder="Type here" />
@@ -30,7 +30,7 @@
             </fieldset>
             <fieldset class="fieldset">
               <legend class="fieldset-legend">Image</legend>
-              <input type="file" class="file-input" />
+              <input type="file" class="file-input" name="image"/>
               <p class="fieldset-label">Optional</p>
             </fieldset>
             <button type="submit" class="btn btn-secondary w-full mt-4">ADD PRODUCT</button>

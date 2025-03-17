@@ -1,27 +1,46 @@
 package servlet;
 
+import java.io.File;
 import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.nio.file.Paths;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
+import main.Product;
+import database.ProductDB;
 
-@WebServlet("/admin/ProductServlet")
+@WebServlet("/ProductServlet")
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+        maxFileSize = 1024 * 1024 * 10, // 10MB
+        maxRequestSize = 1024 * 1024 * 50 // 50MB
+)
 public class ProductServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Get product name from form data
-        String productName = request.getParameter("name");
+        // Get form data
+        String name = request.getParameter("name");
+        String description = request.getParameter("description");
+        double price = Double.parseDouble(request.getParameter("price"));
+        int quantity = Integer.parseInt(request.getParameter("quantity"));
 
-        response.setContentType("text/html;charset=UTF-8");
-        response.getWriter().println("<html><body>");
-        if (productName != null && !productName.trim().isEmpty()) {
-            response.getWriter().println("<p style='color: green;'>Product " + productName + " added successfully!</p>");
-        } else {
-            response.getWriter().println("<p style='color: red;'>Product name cannot be empty!</p>");
-        }
-        response.getWriter().println("</body></html>");
+        // Handle Image Upload
+        Part filePart = request.getPart("image");
+        String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+        String uploadDir = getServletContext().getRealPath("") + File.separator + "uploads";
+        File uploadDirFile = new File(uploadDir);
+        if (!uploadDirFile.exists()) uploadDirFile.mkdir();
+        String filePath = uploadDir + File.separator + fileName;
+        filePart.write(filePath);
+
+        // Create product and save to database
+        Product product = new Product(0, name, description, price, quantity, "uploads/" + fileName);
+        ProductDB.addProduct(product);
+
+        // Redirect or send response
+        response.sendRedirect("product_list.jsp"); // Change to your product listing page
     }
 }
