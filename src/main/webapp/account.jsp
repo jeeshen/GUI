@@ -13,6 +13,37 @@
         currentTab = "signin";
     }
 
+    // Check for remember me cookie
+    String rememberedEmail = "";
+    boolean isRemembered = false;
+
+    // Get all cookies
+    Cookie[] cookies = request.getCookies();
+    if (cookies != null) {
+        for (Cookie cookie : cookies) {
+            if ("rememberedUser".equals(cookie.getName())) {
+                rememberedEmail = cookie.getValue();
+                isRemembered = true;
+
+                // Auto-login if cookie exists and user is not logged in yet
+                if (userSession.getAttribute("user") == null) {
+                    // Get user role from database based on email from cookie
+                    String userRole = AccountDB.getUserRole(rememberedEmail);
+                    // Only set the session if the user exists (role is not null)
+                    if (userRole != null) {
+                        userSession.setAttribute("user", rememberedEmail);
+                        userSession.setAttribute("userRole", userRole);
+
+                        // Optional: Auto redirect to dashboard if cookie exists
+                        // Uncomment below lines to enable auto-redirect
+                        // response.sendRedirect("dashboard.jsp");
+                        // return;
+                    }
+                }
+            }
+        }
+    }
+
     String formAction = request.getParameter("formAction");
     if (formAction != null) {
         if ("signin".equals(formAction)) {
@@ -30,15 +61,19 @@
                     String userRole = AccountDB.getUserRole(email);
                     userSession.setAttribute("userRole", userRole);
 
-                    // Handle remember me functionality using session
+                    // Handle remember me functionality using cookies
                     if (remember != null && remember.equals("on")) {
-                        // Set session timeout to 30 days (in seconds)
-                        userSession.setMaxInactiveInterval(30 * 24 * 60 * 60);
-                        userSession.setAttribute("rememberMe", "true");
+                        // Create a cookie for remembered user (30 days)
+                        Cookie rememberCookie = new Cookie("rememberedUser", email);
+                        rememberCookie.setMaxAge(30 * 24 * 60 * 60); // 30 days in seconds
+                        rememberCookie.setPath("/"); // Make cookie available to entire application
+                        response.addCookie(rememberCookie);
                     } else {
-                        // Default session timeout (e.g., 30 minutes)
-                        userSession.setMaxInactiveInterval(30 * 60);
-                        userSession.setAttribute("rememberMe", "false");
+                        // If not checked, delete any existing remember me cookie
+                        Cookie rememberCookie = new Cookie("rememberedUser", "");
+                        rememberCookie.setMaxAge(0); // Delete cookie
+                        rememberCookie.setPath("/");
+                        response.addCookie(rememberCookie);
                     }
 
                     // Redirect to dashboard
@@ -75,21 +110,6 @@
 
     String registered = request.getParameter("registered");
     boolean justRegistered = "true".equals(registered);
-
-    // Check if user has a remembered session
-    String rememberedEmail = "";
-    boolean isRemembered = false;
-
-    // Check if user is already logged in with remember me enabled
-    if (userSession.getAttribute("user") != null && "true".equals(userSession.getAttribute("rememberMe"))) {
-        rememberedEmail = (String) userSession.getAttribute("user");
-        isRemembered = true;
-
-        // Auto redirect to dashboard if they're already logged in with remember me
-        // Uncomment the following lines if you want auto-redirect behavior
-        // response.sendRedirect("dashboard.jsp");
-        // return;
-    }
 %>
 
 <div class="mt-30 flex justify-center p-4">
