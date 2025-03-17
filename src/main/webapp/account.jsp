@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
-    <%@ include file="header.jsp" %>
+    <%@ include file="components/header.jsp" %>
     <body class="bg-white font-inter pb-150">
     <div class="mt-30 flex justify-center p-4">
         <div class="w-full max-w-md mt-4">
