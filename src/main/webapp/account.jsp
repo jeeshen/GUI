@@ -4,70 +4,26 @@
 <%@ include file="components/header.jsp" %>
 <body class="bg-white font-inter pb-150">
 <%
-    // 使用 JSP 检查当前显示的是登录还是注册页面
     String currentTab = request.getParameter("tab");
     if (currentTab == null) {
-        currentTab = "signin"; // 默认显示登录页面
+        currentTab = "signin";
     }
 
-    // 检查表单提交
     String formAction = request.getParameter("formAction");
     if (formAction != null) {
         if ("signin".equals(formAction)) {
-            // 在这里处理登录逻辑
             String email = request.getParameter("email");
             String password = request.getParameter("password");
             String remember = request.getParameter("remember");
 
-            // 这里添加你的验证和登录处理代码
-            // 例如：
-            /*
-            if (email != null && password != null) {
-                // 验证用户
-                boolean isValid = validateUser(email, password);
-                if (isValid) {
-                    // 创建会话
-                    session.setAttribute("user", email);
-                    // 重定向到主页或控制面板
-                    response.sendRedirect("dashboard.jsp");
-                    return;
-                } else {
-                    // 设置错误消息
-                    request.setAttribute("errorMessage", "Invalid email or password");
-                }
-            }
-            */
-
         } else if ("register".equals(formAction)) {
-            // 在这里处理注册逻辑
             String email = request.getParameter("email");
             String username = request.getParameter("username");
             String password = request.getParameter("password");
             String confirmPassword = request.getParameter("confirmPassword");
-
-            // 这里添加你的验证和注册处理代码
-            // 例如：
-            /*
-            if (email != null && username != null && password != null && confirmPassword != null) {
-                if (!password.equals(confirmPassword)) {
-                    request.setAttribute("errorMessage", "Passwords do not match");
-                } else {
-                    // 注册用户
-                    boolean isRegistered = registerUser(email, username, password);
-                    if (isRegistered) {
-                        // 注册成功，重定向到登录页面
-                        response.sendRedirect("account.jsp?tab=signin&registered=true");
-                        return;
-                    } else {
-                        request.setAttribute("errorMessage", "Registration failed. Please try again.");
-                    }
-                }
-            }
-            */
         }
     }
 
-    // 检查是否刚刚注册成功
     String registered = request.getParameter("registered");
     boolean justRegistered = "true".equals(registered);
 %>
@@ -76,7 +32,6 @@
     <div class="w-full max-w-md mt-4">
         <h1 class="text-4xl font-bold text-center mb-8">ACCOUNT</h1>
 
-        <!-- 标签 -->
         <div class="flex border-b border-gray-200 mb-8">
             <a href="?tab=signin" class="flex-1 py-3 font-bold text-center <%= "signin".equals(currentTab) ? "border-b-2 border-black" : "" %>">SIGN IN</a>
             <a href="?tab=register" class="flex-1 py-3 font-bold text-center <%= "register".equals(currentTab) ? "border-b-2 border-black" : "" %>">REGISTER</a>
@@ -94,7 +49,6 @@
         </div>
         <% } %>
 
-        <!-- 登录内容 -->
         <div id="signin-content" class="<%= "signin".equals(currentTab) ? "block" : "hidden" %>">
             <div class="text-center mb-6">
                 <p class="font-bold">WELCOME BACK.</p>
@@ -133,7 +87,6 @@
             </form>
         </div>
 
-        <!-- 注册内容 -->
         <div id="register-content" class="<%= "register".equals(currentTab) ? "block" : "hidden" %>">
             <div class="mb-6">
                 <p>Create an account and benefit from a more personal shopping experience, and quicker online checkout.</p>
@@ -176,21 +129,5 @@
         </div>
     </div>
 </div>
-
-<%-- 可以创建一个单独的 JSP 文件来处理业务逻辑，如下 --%>
-<%!
-    // 在这里可以定义方法
-    /*
-    private boolean validateUser(String email, String password) {
-        // 实现验证逻辑
-        return true; // 示例
-    }
-
-    private boolean registerUser(String email, String username, String password) {
-        // 实现注册逻辑
-        return true; // 示例
-    }
-    */
-%>
 </body>
 </html>
