@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
-<title>Login Page | Jevore</title>
 <html>
     <%@ include file="header.jsp" %>
     <body class="bg-white font-inter pb-150">
