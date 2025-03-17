@@ -5,6 +5,9 @@
 <%@ include file="components/header.jsp" %>
 <body class="bg-white font-inter pb-150">
 <%
+    // Get or create the session explicitly
+    HttpSession userSession = request.getSession();
+
     String currentTab = request.getParameter("tab");
     if (currentTab == null) {
         currentTab = "signin";
@@ -22,10 +25,22 @@
                 boolean isValid = AccountDB.validateUser(email, password);
                 if (isValid) {
                     // Create session
-                    session.setAttribute("user", email);
+                    userSession.setAttribute("user", email);
                     // Get user role
                     String userRole = AccountDB.getUserRole(email);
-                    session.setAttribute("userRole", userRole);
+                    userSession.setAttribute("userRole", userRole);
+
+                    // Handle remember me functionality using session
+                    if (remember != null && remember.equals("on")) {
+                        // Set session timeout to 30 days (in seconds)
+                        userSession.setMaxInactiveInterval(30 * 24 * 60 * 60);
+                        userSession.setAttribute("rememberMe", "true");
+                    } else {
+                        // Default session timeout (e.g., 30 minutes)
+                        userSession.setMaxInactiveInterval(30 * 60);
+                        userSession.setAttribute("rememberMe", "false");
+                    }
+
                     // Redirect to dashboard
                     response.sendRedirect("dashboard.jsp");
                     return;
@@ -60,6 +75,21 @@
 
     String registered = request.getParameter("registered");
     boolean justRegistered = "true".equals(registered);
+
+    // Check if user has a remembered session
+    String rememberedEmail = "";
+    boolean isRemembered = false;
+
+    // Check if user is already logged in with remember me enabled
+    if (userSession.getAttribute("user") != null && "true".equals(userSession.getAttribute("rememberMe"))) {
+        rememberedEmail = (String) userSession.getAttribute("user");
+        isRemembered = true;
+
+        // Auto redirect to dashboard if they're already logged in with remember me
+        // Uncomment the following lines if you want auto-redirect behavior
+        // response.sendRedirect("dashboard.jsp");
+        // return;
+    }
 %>
 
 <div class="mt-30 flex justify-center p-4">
@@ -95,7 +125,7 @@
 
                 <label class="floating-label block w-[448px] mb-6">
                     <span>Email</span>
-                    <input type="text" name="email" placeholder="Email"
+                    <input type="text" name="email" placeholder="Email" value="<%= rememberedEmail %>"
                            class="cursor-text appearance-none bg-white align-middle whitespace-nowrap w-[448px] h-[40px] border border-gray-300 shadow-[inset_0_1px_rgba(0,0,0,0.1),inset_0_-1px_rgba(255,255,255,0.1)] rounded-md flex-shrink px-3 text-sm inline-flex items-center gap-2 relative" />
                 </label>
 
@@ -112,9 +142,15 @@
                     </a>
                 </div>
 
-                <div class="flex items-center mb-6">
-                    <input type="checkbox" name="remember" id="remember" class="mr-2">
-                    <label for="remember">Remember me (optional)</label>
+                <!-- Enhanced Remember Me Section with border and description -->
+                <div class="mb-6 border border-gray-200 rounded-md p-4">
+                    <div class="flex items-center mb-2">
+                        <input type="checkbox" name="remember" id="remember" class="mr-2" <%= isRemembered ? "checked" : "" %>>
+                        <label for="remember" class="font-bold">Remember Me</label>
+                    </div>
+                    <div class="text-sm text-gray-600">
+                        <p>Stay signed in on this device. Your session will remain active for 30 days. For security reasons, use this option only on your personal devices.</p>
+                    </div>
                 </div>
 
                 <button type="submit" class="w-full bg-black text-white py-4 font-bold uppercase tracking-wider">SIGN IN</button>
