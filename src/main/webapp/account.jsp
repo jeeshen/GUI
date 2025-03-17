@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="database.AccountDB" %>
 <!DOCTYPE html>
 <html>
 <%@ include file="components/header.jsp" %>
@@ -16,11 +17,44 @@
             String password = request.getParameter("password");
             String remember = request.getParameter("remember");
 
+            if (email != null && password != null) {
+                // Validate user
+                boolean isValid = AccountDB.validateUser(email, password);
+                if (isValid) {
+                    // Create session
+                    session.setAttribute("user", email);
+                    // Get user role
+                    String userRole = AccountDB.getUserRole(email);
+                    session.setAttribute("userRole", userRole);
+                    // Redirect to dashboard
+                    response.sendRedirect("dashboard.jsp");
+                    return;
+                } else {
+                    // Set error message
+                    request.setAttribute("errorMessage", "Invalid email or password");
+                }
+            }
         } else if ("register".equals(formAction)) {
             String email = request.getParameter("email");
             String username = request.getParameter("username");
             String password = request.getParameter("password");
             String confirmPassword = request.getParameter("confirmPassword");
+
+            if (email != null && username != null && password != null && confirmPassword != null) {
+                if (!password.equals(confirmPassword)) {
+                    request.setAttribute("errorMessage", "Passwords do not match");
+                } else {
+                    // Register user
+                    boolean isRegistered = AccountDB.registerUser(email, username, password);
+                    if (isRegistered) {
+                        // Registration successful, redirect to login page
+                        response.sendRedirect("account.jsp?tab=signin&registered=true");
+                        return;
+                    } else {
+                        request.setAttribute("errorMessage", "Registration failed. Please try again.");
+                    }
+                }
+            }
         }
     }
 
