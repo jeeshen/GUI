@@ -3,7 +3,6 @@
 <title>Login Page | Jevore</title>
 <html>
     <%@ include file="header.jsp" %>
-    <body>
     <body class="bg-white font-inter pb-150">
     <div class="mt-30 flex justify-center p-4">
         <div class="w-full max-w-md mt-4">

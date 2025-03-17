@@ -5,7 +5,6 @@
     <preferences />
   </component>
   <component name="DBNavigator.Project.DatabaseAssistantManager">
-    <assistants />
   </component>
   <component name="DBNavigator.Project.DatabaseBrowserManager">
     <autoscroll-to-editor value="false" />
@@ -17,7 +16,6 @@
     <open-files />
   </component>
   <component name="DBNavigator.Project.Settings">
-    <connections />
     <browser-settings>
       <general>
         <display-mode value="TABBED" />

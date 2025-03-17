@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
     <%@ include file="header.jsp" %>
-    <body class="bg-base-100 pb-20 mb-50">
+    <body class="bg-base-100 pb-150">
         <p class="w-full text-black-500 font-inter text-7xl font-bold pl-100">About US</p>
         <p class="mt-20 w-[85%] text-black-400 font-inter text-5xl pl-100">Our mission is to connect people with the latest technology and innovation.</p>
         <p class="mt-20 w-[85%] text-black-400 font-inter text-5xl pl-100">We believe that everyone deserves access to<br>
