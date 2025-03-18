@@ -8,14 +8,20 @@ public class Product implements Serializable {
     private double price;
     private int stockQuantity;
     private String imageUrl;
+    private String status;
 
-    public Product(int id, String name, String description, double price, int stockQuantity, String imageUrl) {
+    public Product(int id, String name, String description, double price, int stockQuantity, String imageUrl, String status) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.stockQuantity = stockQuantity;
         this.imageUrl = imageUrl;
+        this.status = status;
+    }
+
+    public Product() {
+        this(0, "", "", 0, 0, "", "");
     }
 
     public int getId() {
@@ -66,9 +72,17 @@ public class Product implements Serializable {
         this.imageUrl = imageUrl;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "Product{id=" + id + ", name='" + name + "', description='" + description + "', price=" + price +
-                ", stockQuantity=" + stockQuantity + ", imageUrl='" + imageUrl + "'}";
+                ", stockQuantity=" + stockQuantity + ", imageUrl='" + imageUrl + "', status='" + status + "'}";
     }
 }

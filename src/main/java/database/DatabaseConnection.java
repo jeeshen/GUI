@@ -11,7 +11,7 @@ public class DatabaseConnection {
 
     static {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver"); // Load the driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("MySQL JDBC Driver not found!", e);
         }

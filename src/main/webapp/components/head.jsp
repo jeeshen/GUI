@@ -33,5 +33,8 @@
         body {
             margin-bottom: 50%;
         }
+        html {
+            scrollbar-gutter: stable;
+        }
     </style>
 </head>

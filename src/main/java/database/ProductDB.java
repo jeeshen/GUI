@@ -6,9 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDB {
-
     public static void addProduct(Product product) {
-        String sql = "INSERT INTO products (name, description, price, stock_quantity, image_url) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO products (name, description, price, stock_quantity, image_url, status) VALUES (?, ?, ?, ?, ?, 'ACTIVE')";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -21,7 +20,7 @@ public class ProductDB {
             pstmt.setString(5, product.getImageUrl());
 
             pstmt.executeUpdate();
-            System.out.println("✅ Product added successfully!");
+            System.out.println("Product added successfully!");
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -30,7 +29,7 @@ public class ProductDB {
 
     public static List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
-        String sql = "SELECT * FROM products";
+        String sql = "SELECT * FROM products WHERE status = 'ACTIVE'";
 
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
@@ -43,7 +42,8 @@ public class ProductDB {
                         rs.getString("description"),
                         rs.getDouble("price"),
                         rs.getInt("stock_quantity"),
-                        rs.getString("image_url")
+                        rs.getString("image_url"),
+                        rs.getString("status")
                 ));
             }
 
@@ -52,6 +52,35 @@ public class ProductDB {
         }
 
         return products;
+    }
+
+    public static Product getProductById(int productId) {
+        String sql = "SELECT * FROM products WHERE id = ? AND status = 'ACTIVE'";
+        Product product = null;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, productId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                product = new Product(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getDouble("price"),
+                        rs.getInt("stock_quantity"),
+                        rs.getString("image_url"),
+                        rs.getString("status")
+                );
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return product;
     }
 
     public static void updateStock(int productId, int newStock) {
@@ -64,7 +93,7 @@ public class ProductDB {
             pstmt.setInt(2, productId);
             pstmt.executeUpdate();
 
-            System.out.println("✅ Stock updated successfully!");
+            System.out.println("Stock updated successfully!");
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -72,7 +101,7 @@ public class ProductDB {
     }
 
     public static void deleteProduct(int productId) {
-        String sql = "DELETE FROM products WHERE id = ?";
+        String sql = "UPDATE products SET status = 'DELETED' WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -80,7 +109,7 @@ public class ProductDB {
             pstmt.setInt(1, productId);
             pstmt.executeUpdate();
 
-            System.out.println("✅ Product deleted successfully!");
+            System.out.println("Product deleted successfully!");
 
         } catch (SQLException e) {
             e.printStackTrace();
