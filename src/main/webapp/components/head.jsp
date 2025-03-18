@@ -9,10 +9,14 @@
             pageTitle = "About Us | Jevore";
         } else if (path.contains("account.jsp")) {
             pageTitle = "Account | Jevore";
+        } else if (path.contains("product.jsp")) {
+            pageTitle = "Products | Jevore";
         } else if (path.contains("admin/home.jsp")) {
             pageTitle = "Home | Jevore Admin";
         } else if (path.contains("admin/product.jsp")) {
-            pageTitle = "Product | Jevore Admin";
+            pageTitle = "Products | Jevore Admin";
+        } else if (path.contains("admin/user.jsp")) {
+            pageTitle = "Users | Jevore Admin";
         }
         else {
             pageTitle = "Home | Jevore";

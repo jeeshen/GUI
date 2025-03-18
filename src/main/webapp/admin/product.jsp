@@ -39,34 +39,34 @@
           <form method="post" action="${pageContext.request.contextPath}/ProductServlet" enctype="multipart/form-data" onsubmit="return validateAddProduct()">
             <fieldset class="fieldset">
               <legend class="fieldset-legend">Product Name</legend>
-              <input type="text" class="input" name="name" placeholder="Type here" />
+              <input type="text" class="input" name="name" id="addName" placeholder="Type here" />
               <p class="fieldset-label">Compulsory</p>
               <span class="text-red-500" id="addNameError"></span>
             </fieldset>
 
             <fieldset class="fieldset mt-2">
               <legend class="fieldset-legend">Description</legend>
-              <input type="text" class="input" name="description"placeholder="Type here" />
+              <input type="text" class="input" name="description" placeholder="Type here" />
               <p class="fieldset-label">Optional</p>
             </fieldset>
 
             <fieldset class="fieldset mt-2">
               <legend class="fieldset-legend">Price</legend>
-              <input type="text" class="input" name="price"placeholder="Type here" />
+              <input type="text" class="input" name="price" id="addPrice" placeholder="Type here" />
               <p class="fieldset-label">Compulsory</p>
               <span class="text-red-500" id="addPriceError"></span>
             </fieldset>
 
             <fieldset class="fieldset mt-2">
               <legend class="fieldset-legend">Stock Quantity</legend>
-              <input type="number" class="input" name="quantity" placeholder="Type here" />
+              <input type="number" class="input" name="quantity" id="addQuantity" placeholder="Type here" />
               <p class="fieldset-label">Compulsory</p>
               <span class="text-red-500" id="addQuantityError"></span>
             </fieldset>
 
             <fieldset class="fieldset mt-2">
               <legend class="fieldset-legend">Image</legend>
-              <input type="file" class="file-input" name="image"/>
+              <input type="file" class="file-input" name="image" id="addImage"/>
               <p class="fieldset-label">Optional</p>
               <span class="text-red-500" id="addImageError"></span>
             </fieldset>
@@ -84,10 +84,10 @@
       <div class="modal-box" style="width: 350px">
         <h3 class="text-lg font-bold flex justify-center">Editing Product</h3>
         <div class="flex justify-center">
-          <form method="post" action="${pageContext.request.contextPath}/ProductServlet" enctype="multipart/form-data" onsubmit="return validateAddProduct()">
+          <form method="post" action="${pageContext.request.contextPath}/ProductServlet" enctype="multipart/form-data" onsubmit="return validateEditProduct()">
             <fieldset class="fieldset">
               <legend class="fieldset-legend">New Product Name</legend>
-              <input type="text" class="input" name="name" placeholder="Type here" value="<%=editingProduct.getName()%>"/>
+              <input type="text" class="input" name="name" id="editName" placeholder="Type here" value="<%=editingProduct.getName()%>"/>
               <p class="fieldset-label">Compulsory</p>
               <span class="text-red-500" id="editNameError"></span>
             </fieldset>
@@ -100,25 +100,26 @@
 
             <fieldset class="fieldset mt-2">
               <legend class="fieldset-legend">Price</legend>
-              <input type="text" class="input" name="price" placeholder="Type here" value="<%=editingProduct.getPrice()%>"/>
+              <input type="text" class="input" name="price" id="editPrice" placeholder="Type here" value="<%=editingProduct.getPrice()%>"/>
               <p class="fieldset-label">Compulsory</p>
               <span class="text-red-500" id="editPriceError"></span>
             </fieldset>
 
             <fieldset class="fieldset mt-2">
               <legend class="fieldset-legend">Stock Quantity</legend>
-              <input type="number" class="input" name="quantity" placeholder="Type here" value="<%=editingProduct.getStockQuantity()%>"/>
+              <input type="number" class="input" name="quantity" id="editQuantity" placeholder="Type here" value="<%=editingProduct.getStockQuantity()%>"/>
               <p class="fieldset-label">Compulsory</p>
               <span class="text-red-500" id="editQuantityError"></span>
             </fieldset>
 
             <fieldset class="fieldset mt-2">
               <legend class="fieldset-legend">Image</legend>
-              <input type="file" class="file-input" name="image" id="image"/>
+              <input type="file" class="file-input" name="image" id="editImage"/>
               <p class="fieldset-label">Optional</p>
               <span class="text-red-500" id="editImageError"></span>
             </fieldset>
 
+            <input type="hidden" name="productID" value="<%=editingProduct.getId()%>"/>
             <input type="hidden" name="action" value="update"/>
             <button type="submit" class="btn btn-outline btn-success w-full mt-4">Update Product</button>
           </form>
@@ -172,7 +173,7 @@
                   </div>
                 </td>
                 <td>
-                  <%=product.getDescription()%>
+                  <%=!product.getDescription().isEmpty() ? product.getDescription() : "-" %>
                 </td>
                 <td><%=product.getPrice()%></td>
                 <td><%=product.getStockQuantity()%></td>
@@ -224,10 +225,10 @@
       function validateAddProduct() {
         let isValid = true;
 
-        let name = document.getElementById("name").value.trim();
-        let price = document.getElementById("price").value.trim();
-        let quantity = document.getElementById("quantity").value.trim();
-        var imageInput = document.getElementById("image");
+        let name = document.getElementById("addName").value.trim();
+        let price = document.getElementById("addPrice").value.trim();
+        let quantity = document.getElementById("addQuantity").value.trim();
+        var imageInput = document.getElementById("addImage");
 
         document.getElementById("addNameError").textContent = "";
         document.getElementById("addPriceError").textContent = "";
@@ -254,6 +255,46 @@
           var maxSize = 2 * 1024 * 1024;
           if (fileSize > maxSize) {
             document.getElementById("addImageError").textContent = "Image size should be less than 2MB.";
+            isValid = false;
+          }
+        }
+
+        return isValid;
+      }
+
+      function validateEditProduct() {
+        let isValid = true;
+
+        let name = document.getElementById("editName").value.trim();
+        let price = document.getElementById("editPrice").value.trim();
+        let quantity = document.getElementById("editQuantity").value.trim();
+        var imageInput = document.getElementById("editImage");
+
+        document.getElementById("editNameError").textContent = "";
+        document.getElementById("editPriceError").textContent = "";
+        document.getElementById("editQuantityError").textContent = "";
+        document.getElementById("editImageError").textContent = "";
+
+        if (name === "") {
+          document.getElementById("editNameError").textContent = "Product Name is required.";
+          isValid = false;
+        }
+
+        if (price === "" || isNaN(price) || parseFloat(price) <= 0) {
+          document.getElementById("editPriceError").textContent = "Enter a valid price.";
+          isValid = false;
+        }
+
+        if (quantity === "" || isNaN(quantity) || parseInt(quantity) <= 0) {
+          document.getElementById("editQuantityError").textContent = "Enter a valid stock quantity.";
+          isValid = false;
+        }
+
+        if (imageInput.files.length > 0) {
+          var fileSize = imageInput.files[0].size;
+          var maxSize = 2 * 1024 * 1024;
+          if (fileSize > maxSize) {
+            document.getElementById("editImageError").textContent = "Image size should be less than 2MB.";
             isValid = false;
           }
         }

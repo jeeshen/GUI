@@ -12,7 +12,6 @@ public class ProductDB {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            System.out.println(conn);
             pstmt.setString(1, product.getName());
             pstmt.setString(2, product.getDescription());
             pstmt.setDouble(3, product.getPrice());
@@ -82,6 +81,32 @@ public class ProductDB {
 
         return product;
     }
+
+    public static void updateProduct(Product product) {
+        String sql = "UPDATE products SET name = ?, description = ?, price = ?, stock_quantity = ?, image_url = ? WHERE id = ? AND status = 'ACTIVE'";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            System.out.println("sds");
+            pstmt.setString(1, product.getName());
+            pstmt.setString(2, product.getDescription());
+            pstmt.setDouble(3, product.getPrice());
+            pstmt.setInt(4, product.getStockQuantity());
+            pstmt.setString(5, product.getImageUrl());
+            pstmt.setInt(6, product.getId());
+
+            int rowsUpdated = pstmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Product updated successfully!");
+            } else {
+                System.out.println("Product not found or inactive.");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public static void updateStock(int productId, int newStock) {
         String sql = "UPDATE products SET stock_quantity = ? WHERE id = ?";

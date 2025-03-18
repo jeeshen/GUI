@@ -1,6 +1,8 @@
 package database;
 
 import main.Account;
+import main.Product;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +28,38 @@ public class AccountDB {
                 String password = rs.getString("password");
                 String role = rs.getString("role");
                 String status = rs.getString("status");
-                account = new Account(id, email, username, password, role, status);
+                String createdAt = rs.getString("createdAt");
+                account = new Account(id, email, username, password, role, status, createdAt);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            closeResources(rs, pstmt, conn);
+        }
+        return account;
+    }
+
+    public static Account getAccountById(int id) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Account account = null;
+
+        try {
+            conn = DatabaseConnection.getConnection();
+            String sql = "SELECT * FROM users WHERE id = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, id);
+
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                String email = rs.getString("email");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                String role = rs.getString("role");
+                String status = rs.getString("status");
+                String createdAt = rs.getString("createdAt");
+                account = new Account(id, email, username, password, role, status, createdAt);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -91,7 +124,7 @@ public class AccountDB {
 
         try {
             conn = DatabaseConnection.getConnection();
-            String sql = "SELECT * FROM users";
+            String sql = "SELECT * FROM users WHERE status = 'ACTIVE'";
             pstmt = conn.prepareStatement(sql);
             rs = pstmt.executeQuery();
 
@@ -102,8 +135,38 @@ public class AccountDB {
                 String password = rs.getString("password");
                 String role = rs.getString("role");
                 String status = rs.getString("status");
+                String createdAt = rs.getString("createdAt");
+                users.add(new Account(id, email, username, password, role, status, createdAt));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            closeResources(rs, pstmt, conn);
+        }
+        return users;
+    }
 
-                users.add(new Account(id, email, username, password, role, status));
+    public static List<Account> getAllUsersOnly() {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        List<Account> users = new ArrayList<>();
+
+        try {
+            conn = DatabaseConnection.getConnection();
+            String sql = "SELECT * FROM users WHERE status = 'ACTIVE' AND role = 'USER'";
+            pstmt = conn.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String email = rs.getString("email");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                String role = rs.getString("role");
+                String status = rs.getString("status");
+                String createdAt = rs.getString("createdAt");
+                users.add(new Account(id, email, username, password, role, status, createdAt));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -118,9 +181,8 @@ public class AccountDB {
         PreparedStatement pstmt = null;
 
         try {
-            // Check if user already exists
             if (getAccountByEmail(email) != null) {
-                return false; // User already exists
+                return false;
             }
 
             conn = DatabaseConnection.getConnection();
@@ -140,19 +202,42 @@ public class AccountDB {
         }
     }
 
+    public static boolean registerUser(Account account) {
+        String sql = "INSERT INTO users (username, email, password, role, status) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, account.getUsername());
+            pstmt.setString(2, account.getEmail());
+            pstmt.setString(3, account.getPassword());
+            pstmt.setString(4, account.getRole());
+            pstmt.setString(5, account.getStatus());
+
+            pstmt.executeUpdate();
+            System.out.println("User added successfully!");
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public static boolean updateUser(Account account) {
         Connection conn = null;
         PreparedStatement pstmt = null;
 
         try {
             conn = DatabaseConnection.getConnection();
-            String sql = "UPDATE users SET username = ?, password = ?, role = ?, status = ? WHERE email = ?";
+            String sql = "UPDATE users SET username = ?, email = ?, password = ?, role = ?, status = ? WHERE id = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, account.getUsername());
-            pstmt.setString(2, account.getPassword());
-            pstmt.setString(3, account.getRole());
-            pstmt.setString(4, account.getStatus());
-            pstmt.setString(5, account.getEmail());
+            pstmt.setString(2, account.getEmail());
+            pstmt.setString(3, account.getPassword());
+            pstmt.setString(4, account.getRole());
+            pstmt.setString(5, account.getStatus());
+            pstmt.setString(6, String.valueOf(account.getId()));
 
             int rowsAffected = pstmt.executeUpdate();
             return rowsAffected > 0;

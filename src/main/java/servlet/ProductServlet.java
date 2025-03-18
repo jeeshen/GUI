@@ -49,16 +49,6 @@ public class ProductServlet extends HttpServlet {
 
             request.getSession().setAttribute("successMessage", "Product added successfully!");
             response.sendRedirect("/admin/product.jsp");
-        } else if (request.getParameter("action").equals("bulkDelete")) {
-            String[] selectedProductIds = request.getParameterValues("selectedProduct");
-            if (selectedProductIds != null) {
-                for (String id : selectedProductIds) {
-                    int productId = Integer.parseInt(id);
-                    ProductDB.deleteProduct(productId);
-                }
-            }
-            request.getSession().setAttribute("successMessage", "Selected products deleted successfully!");
-            response.sendRedirect("/admin/product.jsp");
         } else if (request.getParameter("action").equals("delete")) {
             String productIdParam = request.getParameter("productID");
             String[] selectedProductIds = request.getParameterValues("selectedProduct");
@@ -79,6 +69,37 @@ public class ProductServlet extends HttpServlet {
                 request.getSession().setAttribute("errorMessage", "No product selected for deletion.");
             }
 
+            response.sendRedirect("/admin/product.jsp");
+        } else if (request.getParameter("action").equals("update")) {
+            int id = Integer.parseInt(request.getParameter("productID"));
+            String name = request.getParameter("name");
+            String description = request.getParameter("description");
+            double price = Double.parseDouble(request.getParameter("price"));
+            int quantity = Integer.parseInt(request.getParameter("quantity"));
+
+            description = description == null ? "" : description;
+            Part filePart = request.getPart("image");
+
+            String imagePath = "";
+
+            if (filePart != null && filePart.getSize() > 0 && filePart.getSubmittedFileName() != null && !filePart.getSubmittedFileName().isEmpty()) {
+                String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+                String uploadDir = getServletContext().getRealPath("") + File.separator + "uploads";
+                System.out.println(uploadDir);
+                File uploadDirFile = new File(uploadDir);
+                if (!uploadDirFile.exists()) uploadDirFile.mkdir();
+                String filePath = uploadDir + File.separator + fileName;
+                filePart.write(filePath);
+                imagePath = "uploads/" + fileName;
+            } else {
+                Product product = ProductDB.getProductById(id);
+                imagePath = product.getImageUrl();
+            }
+
+            Product product = new Product(id, name, description, price, quantity, imagePath, "active");
+            ProductDB.updateProduct(product);
+
+            request.getSession().setAttribute("successMessage", "Product updated successfully!");
             response.sendRedirect("/admin/product.jsp");
         }
     }

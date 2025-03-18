@@ -8,14 +8,28 @@ public class Account implements Serializable {
     private String password;
     private String role;
     private String status;
+    private String createdAt;
 
-    public Account(int id, String email, String username, String password, String role, String status) {
+    public Account(int id, String email, String username, String password, String role, String status, String createdAt) {
         this.id = id;
         this.email = email;
         this.username = username;
         this.password = password;
         this.role = role;
         this.status = status;
+        this.createdAt = createdAt;
+    }
+
+    public Account(String email, String username, String password, String role, String status) {
+        this(0, email, username, password, role, status,"");
+    }
+
+    public Account(int id, String email, String username, String password) {
+        this(id, email, username, password, "", "","");
+    }
+
+    public Account() {
+        this(0, "", "", "", "", "", "");
     }
 
     public int getId() {
@@ -66,8 +80,20 @@ public class Account implements Serializable {
         this.status = status;
     }
 
-    public boolean isAdmin() {
-        return "ADMIN".equals(this.role);
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public boolean isManager() {
+        return "MANAGER".equals(this.role);
+    }
+
+    public boolean isStaff() {
+        return "STAFF".equals(this.role);
     }
 
     @Override
