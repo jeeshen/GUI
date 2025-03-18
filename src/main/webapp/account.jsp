@@ -60,7 +60,7 @@
                         response.addCookie(rememberCookie);
                     }
 
-                    response.sendRedirect("dashboard.jsp");
+                    response.sendRedirect("index.jsp");
                     return;
                 } else {
                     request.setAttribute("errorMessage", "Invalid email or password");
