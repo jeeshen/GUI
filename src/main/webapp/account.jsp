@@ -1,11 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="database.AccountDB" %>
+<%@ page import="main.Account" %>
 <!DOCTYPE html>
 <html>
 <%@ include file="components/header.jsp" %>
 <body class="bg-white font-inter pb-150">
 <%
-    // Get or create the session explicitly
     HttpSession userSession = request.getSession();
 
     String currentTab = request.getParameter("tab");
@@ -13,11 +13,9 @@
         currentTab = "signin";
     }
 
-    // Check for remember me cookie
     String rememberedEmail = "";
     boolean isRemembered = false;
 
-    // Get all cookies
     Cookie[] cookies = request.getCookies();
     if (cookies != null) {
         for (Cookie cookie : cookies) {
@@ -25,19 +23,11 @@
                 rememberedEmail = cookie.getValue();
                 isRemembered = true;
 
-                // Auto-login if cookie exists and user is not logged in yet
                 if (userSession.getAttribute("user") == null) {
-                    // Get user role from database based on email from cookie
                     String userRole = AccountDB.getUserRole(rememberedEmail);
-                    // Only set the session if the user exists (role is not null)
                     if (userRole != null) {
                         userSession.setAttribute("user", rememberedEmail);
                         userSession.setAttribute("userRole", userRole);
-
-                        // Optional: Auto redirect to dashboard if cookie exists
-                        // Uncomment below lines to enable auto-redirect
-                        // response.sendRedirect("dashboard.jsp");
-                        // return;
                     }
                 }
             }
@@ -52,35 +42,27 @@
             String remember = request.getParameter("remember");
 
             if (email != null && password != null) {
-                // Validate user
                 boolean isValid = AccountDB.validateUser(email, password);
                 if (isValid) {
-                    // Create session
                     userSession.setAttribute("user", email);
-                    // Get user role
                     String userRole = AccountDB.getUserRole(email);
                     userSession.setAttribute("userRole", userRole);
 
-                    // Handle remember me functionality using cookies
                     if (remember != null && remember.equals("on")) {
-                        // Create a cookie for remembered user (30 days)
                         Cookie rememberCookie = new Cookie("rememberedUser", email);
                         rememberCookie.setMaxAge(30 * 24 * 60 * 60); // 30 days in seconds
                         rememberCookie.setPath("/"); // Make cookie available to entire application
                         response.addCookie(rememberCookie);
                     } else {
-                        // If not checked, delete any existing remember me cookie
                         Cookie rememberCookie = new Cookie("rememberedUser", "");
                         rememberCookie.setMaxAge(0); // Delete cookie
                         rememberCookie.setPath("/");
                         response.addCookie(rememberCookie);
                     }
 
-                    // Redirect to dashboard
                     response.sendRedirect("dashboard.jsp");
                     return;
                 } else {
-                    // Set error message
                     request.setAttribute("errorMessage", "Invalid email or password");
                 }
             }
@@ -94,14 +76,17 @@
                 if (!password.equals(confirmPassword)) {
                     request.setAttribute("errorMessage", "Passwords do not match");
                 } else {
-                    // Register user
-                    boolean isRegistered = AccountDB.registerUser(email, username, password);
-                    if (isRegistered) {
-                        // Registration successful, redirect to login page
-                        response.sendRedirect("account.jsp?tab=signin&registered=true");
-                        return;
+                    Account existingAccount = AccountDB.getAccountByEmail(email);
+                    if (existingAccount != null) {
+                        request.setAttribute("errorMessage", "Email already registered");
                     } else {
-                        request.setAttribute("errorMessage", "Registration failed. Please try again.");
+                        boolean isRegistered = AccountDB.registerUser(email, username, password);
+                        if (isRegistered) {
+                            response.sendRedirect("account.jsp?tab=signin&registered=true");
+                            return;
+                        } else {
+                            request.setAttribute("errorMessage", "Registration failed. Please try again.");
+                        }
                     }
                 }
             }

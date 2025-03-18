@@ -1,60 +1,73 @@
 package database;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import main.Account;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Class to handle all database operations related to user accounts
- */
 public class AccountDB {
 
-    /**
-     * Validates a user's credentials
-     *
-     * @param email User's email
-     * @param password User's password
-     * @return true if credentials are valid, false otherwise
-     */
+    public static Account getAccountByEmail(String email) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Account account = null;
+
+        try {
+            conn = DatabaseConnection.getConnection();
+            String sql = "SELECT * FROM users WHERE email = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, email);
+
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                int id = rs.getInt("id");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                String role = rs.getString("role");
+                String status = rs.getString("status");
+                account = new Account(id, email, username, password, role, status);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            closeResources(rs, pstmt, conn);
+        }
+        return account;
+    }
+
     public static boolean validateUser(String email, String password) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
+        boolean isValid = false;
 
         try {
             conn = DatabaseConnection.getConnection();
-            String sql = "SELECT * FROM users WHERE email = ? AND password = ?";
+            String sql = "SELECT * FROM users WHERE email = ? AND password = ? AND status = 'ACTIVE'";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, email);
-            pstmt.setString(2, password); // Note: In production, password hashing should be used
+            pstmt.setString(2, password);
 
             rs = pstmt.executeQuery();
-            return rs.next(); // Returns true if matching user credentials are found
+            isValid = rs.next();
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
         } finally {
-            // Close resources
             closeResources(rs, pstmt, conn);
         }
+        return isValid;
     }
 
-    /**
-     * Gets the role of a user
-     *
-     * @param email User's email
-     * @return User's role, defaults to "USER" if not found
-     */
     public static String getUserRole(String email) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        String role = "USER"; // Default role
+        String role = null;
 
         try {
             conn = DatabaseConnection.getConnection();
-            String sql = "SELECT role FROM users WHERE email = ?";
+            String sql = "SELECT role FROM users WHERE email = ? AND status = 'ACTIVE'";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, email);
 
@@ -65,32 +78,57 @@ public class AccountDB {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            // Close resources
             closeResources(rs, pstmt, conn);
         }
         return role;
     }
 
-    /**
-     * Registers a new user
-     *
-     * @param email User's email
-     * @param username User's username
-     * @param password User's password
-     * @return true if registration is successful, false otherwise
-     */
+    public static List<Account> getAllUsers() {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        List<Account> users = new ArrayList<>();
+
+        try {
+            conn = DatabaseConnection.getConnection();
+            String sql = "SELECT * FROM users";
+            pstmt = conn.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String email = rs.getString("email");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                String role = rs.getString("role");
+                String status = rs.getString("status");
+
+                users.add(new Account(id, email, username, password, role, status));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            closeResources(rs, pstmt, conn);
+        }
+        return users;
+    }
+
     public static boolean registerUser(String email, String username, String password) {
         Connection conn = null;
         PreparedStatement pstmt = null;
 
         try {
+            // Check if user already exists
+            if (getAccountByEmail(email) != null) {
+                return false; // User already exists
+            }
+
             conn = DatabaseConnection.getConnection();
-            // Using database structure including the role field
-            String sql = "INSERT INTO users (email, username, password, role) VALUES (?, ?, ?, 'USER')";
+            String sql = "INSERT INTO users (email, username, password, role, status) VALUES (?, ?, ?, 'USER', 'ACTIVE')";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, email);
             pstmt.setString(2, username);
-            pstmt.setString(3, password); // Note: In production, password hashing should be used
+            pstmt.setString(3, password);
 
             int rowsAffected = pstmt.executeUpdate();
             return rowsAffected > 0;
@@ -98,18 +136,47 @@ public class AccountDB {
             e.printStackTrace();
             return false;
         } finally {
-            // Close resources
             closeResources(null, pstmt, conn);
         }
     }
 
-    /**
-     * Helper method to close database resources
-     *
-     * @param rs ResultSet to close
-     * @param pstmt PreparedStatement to close
-     * @param conn Connection to close
-     */
+    public static boolean updateUser(Account account) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            conn = DatabaseConnection.getConnection();
+            String sql = "UPDATE users SET username = ?, password = ?, role = ?, status = ? WHERE email = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, account.getUsername());
+            pstmt.setString(2, account.getPassword());
+            pstmt.setString(3, account.getRole());
+            pstmt.setString(4, account.getStatus());
+            pstmt.setString(5, account.getEmail());
+
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            closeResources(null, pstmt, conn);
+        }
+    }
+
+    public static boolean deleteUser(String email) {
+        String sql = "UPDATE users SET status = 'DELETED' WHERE email = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, email);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     private static void closeResources(ResultSet rs, PreparedStatement pstmt, Connection conn) {
         try {
             if (rs != null) rs.close();
