@@ -17,7 +17,7 @@
             <% } %>
         </div>
         <p class="w-1/2 text-black-500 font-inter text-2xl font-bold pl-30 mt-30 mb-5">Top Product. <span class="text-gray-500">Product loved by majority.</span></p>
-        <div class="flex justify-left gap-8 mx-30">
+        <div class="grid grid-cols-4 gap-8 ml-30 mr-60">
             <% for (int i = 0; i < 4; i++) { %>
             <div class="transition duration-300 ease-in-out hover:scale-103">
                 <div class="card bg-base-100 w-80 h-110 shadow-2xl">
