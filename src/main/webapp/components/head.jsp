@@ -11,6 +11,8 @@
             pageTitle = "Account | Jevore";
         } else if (path.contains("product.jsp")) {
             pageTitle = "Products | Jevore";
+        } else if (path.contains("search.jsp")) {
+            pageTitle = "Search Product | Jevore";
         } else if (path.contains("admin/home.jsp")) {
             pageTitle = "Home | Jevore Admin";
         } else if (path.contains("admin/product.jsp")) {
