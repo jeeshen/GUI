@@ -15,7 +15,7 @@
         <p class="w-1/2 text-black-500 font-inter text-5xl font-bold pl-30">Shop Jevore</p>
         <p class="mt-20 mb-5 w-1/2 text-black-500 font-inter text-2xl font-bold pl-30">All Models.<span class="text-gray-500">Take your pick.</span></p>
 
-        <div class="grid grid-cols-4 gap-8 mx-30">
+        <div class="grid grid-cols-4 gap-8 ml-30 mr-20">
             <% if (productList != null && !productList.isEmpty()) { %>
             <% for (Product product : productList) { %>
             <div class="transition duration-300 ease-in-out hover:scale-103">
