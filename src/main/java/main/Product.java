@@ -85,4 +85,17 @@ public class Product implements Serializable {
         return "Product{id=" + id + ", name='" + name + "', description='" + description + "', price=" + price +
                 ", stockQuantity=" + stockQuantity + ", imageUrl='" + imageUrl + "', status='" + status + "'}";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Product product = (Product) obj;
+        return id == product.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(id);
+    }
 }
