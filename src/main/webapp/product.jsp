@@ -21,8 +21,7 @@
         <div class="transition duration-300 ease-in-out hover:scale-103">
             <div class="card bg-base-100 w-80 h-110 shadow-2xl">
                 <figure class="h-200">
-                    <!-- Add link around the image with query parameter for product ID -->
-                    <a href="${pageContext.request.contextPath}/productdetails.jsp?productID=<%=product.getId()%>">
+                    <a href="${pageContext.request.contextPath}/productDetail.jsp?productID=<%=product.getId()%>">
                         <img class="object-contain w-full h-full"
                              src="<%= !product.getImageUrl().isEmpty() ? request.getContextPath() + "/" + product.getImageUrl() : "images/empty product.png" %>"
                              alt="<%= product.getName() %>" />

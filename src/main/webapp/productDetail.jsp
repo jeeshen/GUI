@@ -16,7 +16,6 @@
       productID = Integer.parseInt(productIDParam);
       product = ProductDB.getProductById(productID);
     } catch (NumberFormatException e) {
-      // Handle invalid product ID
     }
   }
 
@@ -25,21 +24,18 @@
 
 <% if (product != null) { %>
 <div class="flex gap-10 mx-30">
-  <!-- Product Details Container -->
   <div class="w-1/2 bg-base-200 p-10 rounded-lg">
     <div class="flex items-center gap-4">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
       <p class="text-2xl font-bold my-4">Product Details</p>
     </div>
 
-    <!-- Product Image -->
     <div class="flex justify-center mb-6">
       <img class="object-contain h-64 w-auto"
            src="<%= !product.getImageUrl().isEmpty() ? request.getContextPath() + "/" + product.getImageUrl() : "images/empty product.png" %>"
            alt="<%= product.getName() %>" />
     </div>
 
-    <!-- Product Info -->
     <table class="table w-full">
       <tr>
         <th>Product Name</th>
@@ -70,7 +66,6 @@
       </tr>
     </table>
 
-    <!-- Add to cart button -->
     <form method="post" action="${pageContext.request.contextPath}/CartServlet" class="mt-6">
       <input type="hidden" name="action" value="add"/>
       <input type="hidden" name="productID" value="<%=product.getId()%>"/>
@@ -81,7 +76,6 @@
     </form>
   </div>
 
-  <!-- Features Container -->
   <div class="w-1/2 bg-base-200 p-10 rounded-lg">
     <div class="flex items-center gap-4">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-checks"><path d="m3 7 3 3 3-3"/><path d="M6 10V5"/><line x1="12" x2="20" y1="6" y2="6"/><line x1="12" x2="20" y1="12" y2="12"/><line x1="12" x2="20" y1="18" y2="18"/><path d="m3 17 3 3 3-3"/><path d="M6 20v-5"/></svg>
@@ -151,7 +145,6 @@
       </tr>
     </table>
 
-    <!-- Related products or more info section could be added here -->
     <div class="mt-6">
       <a href="${pageContext.request.contextPath}/product.jsp" class="btn btn-outline w-full mt-42.5">
         BACK TO SHOP
