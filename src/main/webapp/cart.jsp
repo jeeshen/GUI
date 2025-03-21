@@ -122,31 +122,33 @@
             if (!items.isEmpty()) {
         %>
         <div class="flex gap-10 mx-30 mt-20">
-            <div class="bg-base-200 p-10 rounded-lg w-1/3">
+            <div class="bg-base-200 p-10 rounded-lg">
                 <div class="flex items-center gap-4">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hand-coins"><path d="M11 15h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 17"/><path d="m7 21 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9"/><path d="m2 16 6 6"/><circle cx="16" cy="9" r="2.9"/><circle cx="6" cy="5" r="3"/></svg>
                     <p class="text-2xl font-bold my-4">Payment Method</p>
                 </div>
-                <table class="table">
-                    <tr>
-                        <td><input type="radio" name="radio-1" class="radio" checked="checked" /></td>
-                        <td>Cash Payment</td>
-                    </tr>
-                    <tr>
-                        <td><input type="radio" name="radio-1" class="radio"/></td>
-                        <td>Bank Transfer</td>
-                    </tr>
-                    <tr>
-                        <td><input type="radio" name="radio-1" class="radio"/></td>
-                        <td><img src="https://galado.com.my/gld-files/uploads/2015/06/major-Credit-Card-Logos-1024x211.png" width="200"></td>
-                    </tr>
-                    <tr>
-                        <td><input type="radio" name="radio-1" class="radio"/></td>
-                        <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Touch_%27n_Go_eWallet_logo.svg/2024px-Touch_%27n_Go_eWallet_logo.svg.png" width="40"></td>
-                    </tr>
-                </table>
+                <form method="post" action="${pageContext.request.contextPath}/payment.jsp" id="paymentForm">
+                    <table class="table">
+                        <tr>
+                            <td><input type="radio" name="paymentMethod" value="cash" class="radio" checked="checked" /></td>
+                            <td>Cash Payment</td>
+                        </tr>
+                        <tr>
+                            <td><input type="radio" name="paymentMethod" value="bank" class="radio"/></td>
+                            <td>Bank Transfer</td>
+                        </tr>
+                        <tr>
+                            <td><input type="radio" name="paymentMethod" value="credit" class="radio"/></td>
+                            <td><img src="https://galado.com.my/gld-files/uploads/2015/06/major-Credit-Card-Logos-1024x211.png" width="200"></td>
+                        </tr>
+                        <tr>
+                            <td><input type="radio" name="paymentMethod" value="tng" class="radio"/></td>
+                            <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Touch_%27n_Go_eWallet_logo.svg/2024px-Touch_%27n_Go_eWallet_logo.svg.png" width="40"></td>
+                        </tr>
+                    </table>
+                </form>
             </div>
-            <div class="bg-base-200 p-10 rounded-lg w-full">
+            <div class="bg-base-200 p-10 rounded-lg">
                 <div class="flex items-center gap-4">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hand-coins"><path d="M11 15h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 17"/><path d="m7 21 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9"/><path d="m2 16 6 6"/><circle cx="16" cy="9" r="2.9"/><circle cx="6" cy="5" r="3"/></svg>
                     <p class="text-2xl font-bold my-4">Your Information</p>
@@ -165,8 +167,8 @@
                         <td>sssdsd, jalan ss3, batu caves</td>
                     </tr>
                 </table>
-                <div class="w-full flex justify-center mt-10">
-                    <button class="btn btn-success w-full">Proceed Payment</button>
+                <div class="w-full flex justify-center mt-15">
+                    <button onclick="document.getElementById('paymentForm').submit();" class="btn btn-success w-full">Proceed Payment</button>
                 </div>
             </div>
         </div>
