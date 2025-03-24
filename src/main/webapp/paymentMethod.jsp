@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="main.UserInfo, main.Product, java.util.Map, java.text.DecimalFormat" %>
-<%@ page import="javax.xml.registry.infomodel.User" %>
 <%@ page session="true" %>
 <html>
     <%@ include file="components/header.jsp" %>
@@ -15,9 +14,10 @@
         String phone = request.getParameter("phone");
         String address = request.getParameter("address");
 
-        UserInfo user = new UserInfo(name, phone, address);
+        UserInfo userInfo = new UserInfo(name, phone, address);
+        session.setAttribute("userInfo", userInfo);
     %>
-    <body class="bg-base-100 pb-150 font-inter">
+    <body class="bg-base-100 pb-100 font-inter">
         <div class="flex gap-10 mx-30">
             <div class="w-1/2 bg-base-200 p-10 rounded-lg">
                 <div class="flex items-center gap-4">
@@ -96,9 +96,9 @@
             </div>
         </div>
 
-        <form method="get" action="${pageContext.request.contextPath}/paymentMethod.jsp">
+        <form method="post" action="${pageContext.request.contextPath}/CheckoutServlet">
             <div class="flex gap-10 mx-30 mt-20">
-                <div class="bg-base-200 p-10 rounded-lg w-1/3">
+                <div class="bg-base-200 p-10 rounded-lg w-1/2">
                     <div class="flex items-center gap-4">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hand-coins"><path d="M11 15h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 17"/><path d="m7 21 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9"/><path d="m2 16 6 6"/><circle cx="16" cy="9" r="2.9"/><circle cx="6" cy="5" r="3"/></svg>
                         <p class="text-2xl font-bold my-4">Payment Method</p>
@@ -146,32 +146,32 @@
                         </table>
                     </div>
                     <% } else { %>
-                    <div>
+                    <div class="w-1/3 h-auto">
                         <img src="images/tng.jpg" alt="tng">
                     </div>
                     <% }%>
                 </div>
-                <div class="bg-base-200 p-10 rounded-lg w-full">
+                <div class="bg-base-200 p-10 rounded-lg w-1/2">
                     <div class="flex items-center gap-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hand-coins"><path d="M11 15h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 17"/><path d="m7 21 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9"/><path d="m2 16 6 6"/><circle cx="16" cy="9" r="2.9"/><circle cx="6" cy="5" r="3"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-badge-info"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><line x1="12" x2="12" y1="16" y2="12"/><line x1="12" x2="12.01" y1="8" y2="8"/></svg>
                         <p class="text-2xl font-bold my-4">Your Information</p>
                     </div>
                     <table class="table">
                         <tr>
                             <td>Name</td>
-                            <td><input type="text" placeholder="Your name" name="name" class="input" /></td>
+                            <td><%=userInfo.getName()%></td>
                         </tr>
                         <tr>
-                            <td>Email</td>
-                            <td><input type="text" placeholder="Your email" name="email" class="input" /></td>
+                            <td>Phone Number</td>
+                            <td><%=userInfo.getPhoneNumber()%></td>
                         </tr>
                         <tr>
                             <td>Address</td>
-                            <td><input type="text" placeholder="Your address" name="address" class="input" /></td>
+                            <td><%=userInfo.getAddress()%></td>
                         </tr>
                     </table>
                     <div class="w-full flex justify-center mt-15">
-                        <button type="submit" class="btn btn-success w-full">Proceed Payment</button>
+                        <button type="submit" class="btn btn-neutral w-full">Place Order</button>
                     </div>
                 </div>
             </div>

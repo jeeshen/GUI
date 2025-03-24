@@ -1,11 +1,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="main.Cart, main.Product, java.util.Map, java.text.DecimalFormat" %>
+<%@ page import="main.Cart,main.UserInfo, main.Product, java.util.Map, java.text.DecimalFormat" %>
 <%@ page session="true" %>
 <html>
     <%@ include file="components/header.jsp" %>
     <body class="bg-base-100 pb-150 font-inter">
         <div class="flex gap-10 mx-30">
             <%
+                UserInfo userInfo = (UserInfo) session.getAttribute("userInfo");
+                if (userInfo == null) {
+                    userInfo = new UserInfo("", "","");
+                }
                 DecimalFormat df = new DecimalFormat("0.00");
                 Map<Product, Integer> items = cart.getItems();
                 if (!items.isEmpty()) {
@@ -147,21 +151,21 @@
                         <tr>
                             <td>Name</td>
                             <td class="flex flex-col">
-                                <input type="text" placeholder="Your name" name="name" id="inputName" class="input" />
+                                <input type="text" placeholder="Your name" name="name" id="inputName" class="input" value="<%=userInfo.getName()%>"/>
                                 <span class="text-red-500 mt-2" id="inputNameError"></span>
                             </td>
                         </tr>
                         <tr>
                             <td>Phone Number</td>
                             <td class="flex flex-col">
-                                <input type="text" placeholder="Your phone" name="phone" id="inputPhone" class="input" />
+                                <input type="text" placeholder="Your phone" name="phone" id="inputPhone" class="input" value="<%=userInfo.getPhoneNumber()%>"/>
                                 <span class="text-red-500 mt-2" id="inputPhoneError"></span>
                             </td>
                         </tr>
                         <tr>
                             <td>Address</td>
                             <td class="flex flex-col">
-                                <input type="text" placeholder="Your address" name="address" id="inputAddress" class="input" />
+                                <input type="text" placeholder="Your address" name="address" id="inputAddress" class="input" value="<%=userInfo.getAddress()%>"/>
                                 <span class="text-red-500 mt-2" id="inputAddressError"></span>
                             </td>
                         </tr>

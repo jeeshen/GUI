@@ -36,7 +36,7 @@
                             <input type="search" name="query" class="input-3xl" required placeholder="Search"/>
                         </label>
                     </div>
-                    <button class="btn btn-neutral ml-4">Search</button>
+                    <button class="btn btn-neutral ml-4 rounded-lg">Search</button>
                 </div>
             </form>
         </div>
