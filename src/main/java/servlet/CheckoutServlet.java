@@ -35,6 +35,7 @@ public class CheckoutServlet extends HttpServlet {
         for (Map.Entry<Product, Integer> entry : cart.getItems().entrySet()) {
             Product product = entry.getKey();
             int quantity = entry.getValue();
+            ProductDB.updateStock(product.getId(), product.getStockQuantity()-quantity);
             order.addItem(product, quantity);
         }
 

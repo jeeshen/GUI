@@ -8,6 +8,7 @@
             <div class="w-24 h-1 bg-black my-6 mx-auto"></div>
             <h2 class="text-2xl font-semibold mb-4">Please try again!</h2>
             <p class="text-lg text-gray-600 mb-6">
+                <%=request.getParameter("error")+"!"+"<br/>"%>
                 Your order has been cancelled. Please order them again!
             </p>
 

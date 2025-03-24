@@ -6,6 +6,7 @@
     <body class="bg-base-100 pb-150 font-inter">
         <div class="flex gap-10 mx-30">
             <%
+                boolean loggedIn = sessionName.isEmpty();
                 UserInfo userInfo = (UserInfo) session.getAttribute("userInfo");
                 if (userInfo == null) {
                     userInfo = new UserInfo("", "","");
@@ -171,7 +172,7 @@
                         </tr>
                     </table>
                     <div class="w-full flex justify-center mt-15">
-                        <button type="submit" class="btn btn-neutral w-full">Proceed Payment</button>
+                        <button type="submit" class="btn btn-neutral w-full" <%= loggedIn ? "disabled" : "" %>>Proceed Payment</button>
                     </div>
                 </div>
             </div>

@@ -18,6 +18,16 @@
             pageTitle = "Your Cart | Jevore";
         } else if (path.contains("productDetail.jsp")) {
             pageTitle = "Product Detail | Jevore";
+        } else if (path.contains("paymentMethod.jsp")) {
+            pageTitle = "Completing Order | Jevore";
+        } else if (path.contains("orderSuccess.jsp")) {
+            pageTitle = "Order Placed | Jevore";
+        } else if (path.contains("orderFail.jsp")) {
+            pageTitle = "Order Failed | Jevore";
+        } else if (path.contains("404.jsp")) {
+            pageTitle = "404 Error | Jevore";
+        } else if (path.contains("505.jsp")) {
+            pageTitle = "505 Error | Jevore";
         } else if (path.contains("admin/home.jsp")) {
             pageTitle = "Home | Jevore Admin";
         } else if (path.contains("admin/product.jsp")) {

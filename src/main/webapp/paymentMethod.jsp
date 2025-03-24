@@ -5,10 +5,6 @@
     <%@ include file="components/header.jsp" %>
     <%
         DecimalFormat df = new DecimalFormat("0.00");
-        Map<Product, Integer> items = cart.getItems();
-        if (items.isEmpty()) {
-            response.sendRedirect("products.jsp");
-        }
         String paymentMethod = request.getParameter("paymentMethod");
         String name = request.getParameter("name");
         String phone = request.getParameter("phone");
@@ -16,6 +12,21 @@
 
         UserInfo userInfo = new UserInfo(name, phone, address);
         session.setAttribute("userInfo", userInfo);
+
+        Map<Product, Integer> items = cart.getItems();
+        if (items.isEmpty()) {
+            response.sendRedirect("products.jsp");
+        }
+
+        for (Map.Entry<Product, Integer> entry : items.entrySet()) {
+            Product product = entry.getKey();
+            int quantity = entry.getValue();
+
+            if (product.getStockQuantity() < quantity) {
+                response.sendRedirect("orderFail.jsp?error=Insufficient stock for " + product.getName());
+                return;
+            }
+        }
     %>
     <body class="bg-base-100 pb-100 font-inter">
         <div class="flex gap-10 mx-30">
