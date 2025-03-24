@@ -34,7 +34,11 @@
                         <% } %>
                         <div class="card-actions mt-3 justify-evenly">
                             <p class="text-lg my-auto">RM <%= formatter.format(product.getPrice()) %></p>
+                            <% if (product.getStockQuantity() > 0) { %>
                             <button type="submit" class="btn btn-neutral">ADD TO CART</button>
+                            <% } else { %>
+                            <span class="btn btn-disabled text-red-500 font-bold">OUT OF STOCK</span>
+                            <% } %>
                         </div>
                     </div>
                 </div>
