@@ -9,7 +9,6 @@
 <html>
 <%@ include file="../components/head.jsp" %>
 <body style="margin: 0">
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
   String successMessage = (String) session.getAttribute("successMessage");
   if (successMessage != null) {
@@ -79,9 +78,9 @@
 </dialog>
 <dialog id="edit_user" class="modal">
   <div class="modal-box" style="width: 300px">
-    <h3 class="text-lg font-bold flex justify-center">Adding New User</h3>
+    <h3 class="text-lg font-bold flex justify-center">Editing User</h3>
     <div class="flex justify-center">
-      <form method="post" action="${pageContext.request.contextPath}/UserServlet" onsubmit="return validateEditProduct()">
+      <form method="post" action="${pageContext.request.contextPath}/UserServlet" onsubmit="return validateEditUser()">
         <fieldset class="fieldset">
           <legend class="fieldset-legend">Username</legend>
           <input type="text" class="input" name="name" id="editName" placeholder="Type here" value="<%=editingAccount.getUsername()%>"/>
@@ -242,7 +241,7 @@
   }
 
 
-  function validateEditProduct() {
+  function validateEditUser() {
     let isValid = true;
 
     let name = document.getElementById("editName").value.trim();

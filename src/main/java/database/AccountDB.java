@@ -146,6 +146,36 @@ public class AccountDB {
         return users;
     }
 
+    public static List<Account> getAllStaffsOnly() {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        List<Account> users = new ArrayList<>();
+
+        try {
+            conn = DatabaseConnection.getConnection();
+            String sql = "SELECT * FROM users WHERE status = 'ACTIVE' AND (role = 'STAFF' OR ROLE = 'MANAGER')";
+            pstmt = conn.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String email = rs.getString("email");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                String role = rs.getString("role");
+                String status = rs.getString("status");
+                String createdAt = rs.getString("createdAt");
+                users.add(new Account(id, email, username, password, role, status, createdAt));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            closeResources(rs, pstmt, conn);
+        }
+        return users;
+    }
+
     public static List<Account> getAllUsersOnly() {
         Connection conn = null;
         PreparedStatement pstmt = null;

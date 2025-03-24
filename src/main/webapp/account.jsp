@@ -8,8 +8,6 @@
     <%@ include file="components/header.jsp" %>
     <body class="bg-white font-inter pb-150">
         <%
-            HttpSession userSession = request.getSession();
-
             String currentTab = request.getParameter("tab");
             if (currentTab == null) {
                 currentTab = "signin";
@@ -52,12 +50,12 @@
 
                             if (remember != null && remember.equals("on")) {
                                 Cookie rememberCookie = new Cookie("rememberedUser", email);
-                                rememberCookie.setMaxAge(30 * 24 * 60 * 60); // 30 days in seconds
-                                rememberCookie.setPath("/"); // Make cookie available to entire application
+                                rememberCookie.setMaxAge(30 * 24 * 60 * 60);
+                                rememberCookie.setPath("/");
                                 response.addCookie(rememberCookie);
                             } else {
                                 Cookie rememberCookie = new Cookie("rememberedUser", "");
-                                rememberCookie.setMaxAge(0); // Delete cookie
+                                rememberCookie.setMaxAge(0);
                                 rememberCookie.setPath("/");
                                 response.addCookie(rememberCookie);
                             }

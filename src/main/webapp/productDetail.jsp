@@ -118,7 +118,7 @@
         <input type="hidden" name="action" value="add"/>
         <input type="hidden" name="productID" value="<%=product.getId()%>"/>
         <input type="hidden" name="quantity" value="1"/>
-        <button type="submit" class="btn btn-success w-full">
+        <button type="submit" class="btn btn-neutral w-full">
           Add to Cart
         </button>
       </form>

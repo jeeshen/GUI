@@ -45,14 +45,62 @@ public class UserServlet extends HttpServlet {
             String email = request.getParameter("email");
             String password = request.getParameter("password");
 
-            Account account = AccountDB.getAccountById(id);
-            account.setUsername(name);
-            account.setEmail(email);
-            account.setPassword(password);
-            AccountDB.updateUser(account);
+            Account account = AccountDB.getAccountByEmail(email);
+            if (account != null) {
+                request.getSession().setAttribute("errorMessage", "Email already exists!");
+                response.sendRedirect("/admin/user.jsp");
+            }
+            else {
+                account = AccountDB.getAccountById(id);
+                account.setUsername(name);
+                account.setEmail(email);
+                account.setPassword(password);
+                AccountDB.updateUser(account);
+                request.getSession().setAttribute("successMessage", "User updated successfully!");
+                response.sendRedirect("/admin/user.jsp");
+            }
+        } else if (request.getParameter("action").equals("addStaff")) {
+            String name = request.getParameter("name");
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
 
-            request.getSession().setAttribute("successMessage", "User updated successfully!");
-            response.sendRedirect("/admin/user.jsp");
+            Account account = new Account(email, name, password, "STAFF", "ACTIVE");
+            boolean success = AccountDB.registerUser(account);
+
+            if (!success) {
+                request.getSession().setAttribute("errorMessage", "Email already exists!");
+                response.sendRedirect("/admin/staff.jsp");
+            }
+            else {
+                request.getSession().setAttribute("successMessage", "Staff added successfully!");
+                response.sendRedirect("/admin/staff.jsp");
+            }
+        } else if (request.getParameter("action").equals("updateStaff")) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            String name = request.getParameter("name");
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
+
+            Account account = AccountDB.getAccountByEmail(email);
+            if (account != null) {
+                request.getSession().setAttribute("errorMessage", "Email already exists!");
+                response.sendRedirect("/admin/staff.jsp");
+            }
+            else {
+                account = AccountDB.getAccountById(id);
+                account.setUsername(name);
+                account.setEmail(email);
+                account.setPassword(password);
+                AccountDB.updateUser(account);
+                request.getSession().setAttribute("successMessage", "Staff updated successfully!");
+                response.sendRedirect("/admin/staff.jsp");
+            }
+        } else if (request.getParameter("action").equals("delete")) {
+            String email = request.getParameter("email");
+            AccountDB.deleteUser(email);
+            request.getSession().setAttribute("successMessage", "Staff deleted successfully!");
+
+            response.sendRedirect("/admin/staff.jsp");
         }
     }
 }

@@ -1,4 +1,5 @@
 <head>
+    <%@ include file="auth.jsp"%>
     <%
         String path = request.getRequestURI();
         String pageTitle = "Jevore"; // Default title
@@ -15,12 +16,16 @@
             pageTitle = "Search Product | Jevore";
         } else if (path.contains("cart.jsp")) {
             pageTitle = "Your Cart | Jevore";
+        } else if (path.contains("productDetail.jsp")) {
+            pageTitle = "Product Detail | Jevore";
         } else if (path.contains("admin/home.jsp")) {
             pageTitle = "Home | Jevore Admin";
         } else if (path.contains("admin/product.jsp")) {
             pageTitle = "Products | Jevore Admin";
         } else if (path.contains("admin/user.jsp")) {
             pageTitle = "Users | Jevore Admin";
+        } else if (path.contains("admin/staff.jsp")) {
+            pageTitle = "Staffs | Jevore Admin";
         }
         else {
             pageTitle = "Home | Jevore";
