@@ -9,7 +9,7 @@ public class Order {
     final private int userID;
     private List<OrderItem> orderItems;
     private double totalAmount;
-    final private Date orderDate;
+    private Date orderDate;
     private String status;
 
     public Order(int userID) {
@@ -18,6 +18,25 @@ public class Order {
         this.totalAmount = 0.0;
         this.orderDate = new Date();
         this.status = "Pending";
+    }
+
+    public Order(int orderID, int userID, double totalAmount, String status) {
+        this.orderID = orderID;
+        this.userID = userID;
+        this.totalAmount = totalAmount;
+        this.status = status;
+    }
+
+    public Order(int orderID, int userID, double totalAmount, Date orderDate, String status) {
+        this.orderID = orderID;
+        this.userID = userID;
+        this.orderDate = orderDate;
+        this.totalAmount = totalAmount;
+        this.status = status;
+    }
+
+    public Order() {
+        this(0, 0, 0, "Pending");
     }
 
     public int getOrderID() {
@@ -30,6 +49,10 @@ public class Order {
 
     public List<OrderItem> getOrderItems() {
         return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
     }
 
     public double getTotalAmount() {

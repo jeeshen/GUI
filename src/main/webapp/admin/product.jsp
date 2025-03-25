@@ -72,7 +72,7 @@
             </fieldset>
 
             <input type="hidden" name="action" value="add"/>
-            <button type="submit" class="btn btn-outline btn-success w-full mt-4">Add Product</button>
+            <button type="submit" class="btn btn-neutral w-full mt-4">Add Product</button>
           </form>
         </div>
       </div>
@@ -121,7 +121,7 @@
 
             <input type="hidden" name="productID" value="<%=editingProduct.getId()%>"/>
             <input type="hidden" name="action" value="update"/>
-            <button type="submit" class="btn btn-outline btn-success w-full mt-4">Update Product</button>
+            <button type="submit" class="btn btn-neutral w-full mt-4">Update Product</button>
           </form>
         </div>
       </div>

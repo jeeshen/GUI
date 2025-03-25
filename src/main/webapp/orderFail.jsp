@@ -13,8 +13,8 @@
             </p>
 
             <div class="space-x-4 mt-8">
-                <a href="index.jsp">
-                    <button class="btn btn-neutral">Go Home</button>
+                <a href="cart.jsp">
+                    <button class="btn btn-neutral">Go Back to Cart</button>
                 </a>
             </div>
         </div>

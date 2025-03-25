@@ -2,10 +2,15 @@ package database;
 
 import main.Order;
 import main.OrderItem;
+import main.Product;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class OrderDB {
     public static boolean placeOrder(Order order) throws SQLException {
@@ -52,5 +57,133 @@ public class OrderDB {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static List<Order> getAllOrders() throws SQLException {
+        List<Order> orders = new ArrayList<>();
+        Connection conn = DatabaseConnection.getConnection();
+        try {
+            String query = "SELECT * FROM orders";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int orderID = rs.getInt("order_id");
+                int userID = rs.getInt("user_id");
+                double totalAmount = rs.getDouble("total_amount");
+                Date orderDate = rs.getDate("order_date");
+                String status = rs.getString("status");
+
+                Order order = new Order(orderID, userID, totalAmount,orderDate, status);
+                order.setOrderItems(getOrderItems(orderID));
+                orders.add(order);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orders;
+    }
+
+    public static List<Order> getAllOrdersByCustomer(int userID) throws SQLException {
+        List<Order> orders = new ArrayList<>();
+        Connection conn = DatabaseConnection.getConnection();
+        try {
+            String query = "SELECT * FROM orders WHERE user_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, userID);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int orderID = rs.getInt("order_id");
+                double totalAmount = rs.getDouble("total_amount");
+                Date orderDate = rs.getDate("order_date");
+                String status = rs.getString("status");
+
+                Order order = new Order(orderID, userID, totalAmount,orderDate, status);
+                order.setOrderItems(getOrderItems(orderID));
+                orders.add(order);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orders;
+    }
+
+    public static Order getOrderById(int orderID) throws SQLException {
+        Connection conn = DatabaseConnection.getConnection();
+        try {
+            String query = "SELECT * FROM orders WHERE order_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, orderID);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int userID = rs.getInt("user_id");
+                double totalAmount = rs.getDouble("total_amount");
+                Date orderDate = rs.getDate("order_date");
+                String status = rs.getString("status");
+
+                Order order = new Order(orderID, userID, totalAmount,orderDate, status);
+                order.setOrderItems(getOrderItems(orderID));
+                return order;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static List<OrderItem> getOrderItems(int orderID) throws SQLException {
+        Connection conn = DatabaseConnection.getConnection();
+        List<OrderItem> items = new ArrayList<>();
+        String query = "SELECT * FROM order_items WHERE order_id = ?";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1, orderID);
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            int productID = rs.getInt("product_id");
+            int quantity = rs.getInt("quantity");
+
+            Product product = ProductDB.getProductById(productID);
+            OrderItem item = new OrderItem(product, quantity);
+            items.add(item);
+        }
+        return items;
+    }
+
+    public static boolean updateOrderStatus(int orderID, String newStatus) throws SQLException {
+        Connection conn = DatabaseConnection.getConnection();
+        try {
+            String query = "UPDATE orders SET status = ? WHERE order_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, newStatus);
+            stmt.setInt(2, orderID);
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static List<Product> getTopSoldProducts(int top) throws SQLException {
+        List<Product> topProducts = new ArrayList<>();
+        Connection conn = DatabaseConnection.getConnection();
+        try {
+            String query = "SELECT product_id, SUM(quantity) AS total_sold FROM order_items GROUP BY product_id ORDER BY total_sold DESC LIMIT ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, top);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int productID = rs.getInt("product_id");
+                Product product = ProductDB.getProductById(productID);
+                topProducts.add(product);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return topProducts;
     }
 }

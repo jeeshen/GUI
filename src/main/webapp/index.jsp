@@ -1,3 +1,7 @@
+<%@ page import="database.OrderDB" %>
+<%@ page import="main.Product" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.text.DecimalFormat" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -18,26 +22,66 @@
         </div>
         <p class="w-1/2 text-black-500 font-inter text-2xl font-bold pl-30 mt-30 mb-5">Top Product. <span class="text-gray-500">Product loved by majority.</span></p>
         <div class="grid grid-cols-4 gap-8 ml-30 mr-20">
+            <%
+                DecimalFormat formatter = new DecimalFormat("#,##0.00");
+                List<Product> productList = OrderDB.getTopSoldProducts(4);
+                if (productList != null && !productList.isEmpty()) {
+                    for (Product product : productList) {
+            %>
+                <form method="post" action="${pageContext.request.contextPath}/CartServlet">
+                    <div class="transition duration-300 ease-in-out hover:scale-103">
+                        <div class="card bg-base-100 w-80 h-110 shadow-2xl">
+                            <figure class="h-200">
+                                <a href="${pageContext.request.contextPath}/productDetail.jsp?productID=<%=product.getId()%>">
+                                    <img class="object-contain w-full h-full"
+                                         src="<%= !product.getImageUrl().isEmpty() ? request.getContextPath() + "/" + product.getImageUrl() : "images/empty product.png" %>"
+                                         alt="<%= product.getName() %>" />
+                                </a>
+                            </figure>
+                            <div class="card-body">
+                                <div class="ml-2">
+                                    <h2 class="card-title text-2xl font-semibold"><%= product.getName() %></h2>
+                                    <% if (product.getDescription() != null && !product.getDescription().isEmpty()) { %>
+                                    <% } %>
+                                    <div class="card-actions mt-3 justify-evenly">
+                                        <p class="text-lg my-auto">RM <%= formatter.format(product.getPrice()) %></p>
+                                        <% if (product.getStockQuantity() > 0) { %>
+                                        <button type="submit" class="btn btn-neutral">ADD TO CART</button>
+                                        <% } else { %>
+                                        <span class="btn btn-disabled text-red-500 font-bold">OUT OF STOCK</span>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="action" value="add"/>
+                    <input type="hidden" name="productID" value="<%=product.getId()%>"/>
+                    <input type="hidden" name="quantity" value="1"/>
+                </form>
+            <% } %>
+        <% } else { %>
             <% for (int i = 0; i < 4; i++) { %>
-            <div class="transition duration-300 ease-in-out hover:scale-103">
-                <div class="card bg-base-100 w-80 h-110 shadow-2xl">
-                    <figure class="h-200">
-                        <img class="object-contain w-full h-full"
-                             src="https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/iphone-card-40-iphone16prohero-202409?wid=680&hei=528&fmt=p-jpg&qlt=95&.v=1725567335931"
-                             alt="topsold" />
-                    </figure>
-                    <div class="card-body">
-                        <div class="ml-2">
-                            <h2 class="card-title text-xl">JPhone <%= i + 1 %></h2>
-                            <div class="card-actions mt-3 justify-evenly">
-                                <p class="text-md my-auto">RM <%= String.format("%,d", new java.util.Random().nextInt(3001) + 1000) %>.00</p>
-                                <button class="btn btn-neutral">ADD TO CART</button>
+                <div class="transition duration-300 ease-in-out hover:scale-103">
+                    <div class="card bg-base-100 w-80 h-110 shadow-2xl">
+                        <figure class="h-200">
+                            <img class="object-contain w-full h-full"
+                                 src="https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/iphone-card-40-iphone16prohero-202409?wid=680&hei=528&fmt=p-jpg&qlt=95&.v=1725567335931"
+                                 alt="topsold" />
+                        </figure>
+                        <div class="card-body">
+                            <div class="ml-2">
+                                <h2 class="card-title text-xl">JPhone <%= i + 1 %></h2>
+                                <div class="card-actions mt-3 justify-evenly">
+                                    <p class="text-md my-auto">RM <%= String.format("%,d", new java.util.Random().nextInt(3001) + 1000) %>.00</p>
+                                    <button class="btn btn-neutral">ADD TO CART</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             <% } %>
+        <% } %>
         </div>
         <p class="w-1/2 text-black-500 font-inter text-2xl font-bold pl-30 mt-30 mb-5">Why choose us. <span class="text-gray-500">Even more reasons to shop with us.</span></p>
         <div class="flex justify-left gap-8 mx-30">

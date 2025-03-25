@@ -68,7 +68,7 @@
                 </fieldset>
 
                 <input type="hidden" name="action" value="addStaff"/>
-                <button type="submit" class="btn btn-outline btn-success w-full mt-4">Add Staff</button>
+                <button type="submit" class="btn btn-neutral w-full mt-4">Add Staff</button>
             </form>
         </div>
     </div>
@@ -104,7 +104,7 @@
 
                 <input type="hidden" name="id" value="<%=editingAccount.getId()%>"/>
                 <input type="hidden" name="action" value="updateStaff"/>
-                <button type="submit" class="btn btn-outline btn-success w-full mt-4">Update Staff</button>
+                <button type="submit" class="btn btn-neutral w-full mt-4">Update Staff</button>
             </form>
         </div>
     </div>

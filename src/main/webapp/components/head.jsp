@@ -4,7 +4,17 @@
         String path = request.getRequestURI();
         String pageTitle = "Jevore"; // Default title
 
-        if (path.contains("index.jsp")) {
+        if (path.contains("admin/home.jsp")) {
+            pageTitle = "Home | Jevore Admin";
+        } else if (path.contains("admin/product.jsp")) {
+            pageTitle = "Products | Jevore Admin";
+        } else if (path.contains("admin/user.jsp")) {
+            pageTitle = "Users | Jevore Admin";
+        } else if (path.contains("admin/staff.jsp")) {
+            pageTitle = "Staffs | Jevore Admin";
+        } else if (path.contains("admin/order.jsp")) {
+            pageTitle = "Orders | Jevore Admin";
+        } else if (path.contains("index.jsp")) {
             pageTitle = "Home | Jevore";
         } else if (path.contains("aboutus.jsp")) {
             pageTitle = "About Us | Jevore";
@@ -28,14 +38,8 @@
             pageTitle = "404 Error | Jevore";
         } else if (path.contains("505.jsp")) {
             pageTitle = "505 Error | Jevore";
-        } else if (path.contains("admin/home.jsp")) {
-            pageTitle = "Home | Jevore Admin";
-        } else if (path.contains("admin/product.jsp")) {
-            pageTitle = "Products | Jevore Admin";
-        } else if (path.contains("admin/user.jsp")) {
-            pageTitle = "Users | Jevore Admin";
-        } else if (path.contains("admin/staff.jsp")) {
-            pageTitle = "Staffs | Jevore Admin";
+        } else if (path.contains("order.jsp")) {
+            pageTitle = "Your Orders | Jevore";
         }
         else {
             pageTitle = "Home | Jevore";

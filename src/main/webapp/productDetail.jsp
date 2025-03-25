@@ -41,7 +41,7 @@
           </svg>
           <% } %>
         </div>
-        <span class="ml-2 text-sm">4.7/5</span>
+        <span class="ml-2 text-sm">4.7 / 5</span>
       </div>
     </div>
     <div>
@@ -118,9 +118,11 @@
         <input type="hidden" name="action" value="add"/>
         <input type="hidden" name="productID" value="<%=product.getId()%>"/>
         <input type="hidden" name="quantity" value="1"/>
-        <button type="submit" class="btn btn-neutral w-full">
-          Add to Cart
-        </button>
+        <% if (product.getStockQuantity() > 0) { %>
+        <button type="submit" class="btn btn-neutral w-full">Add To Cart</button>
+        <% } else { %>
+        <span class="btn btn-disabled text-red-500 font-bold w-full">Out of Stock</span>
+        <% } %>
       </form>
 
       <div class="w-full">
