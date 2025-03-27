@@ -3,6 +3,7 @@ package database;
 import main.Order;
 import main.OrderItem;
 import main.Product;
+import main.ProductSales;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -185,5 +186,123 @@ public class OrderDB {
             e.printStackTrace();
         }
         return topProducts;
+    }
+
+    public static List<ProductSales> calculateSalesByProduct() throws SQLException {
+        Connection conn = DatabaseConnection.getConnection();
+        List<ProductSales> salesList = new ArrayList<>();
+
+        try {
+            String query = "SELECT product_id, SUM(quantity) AS total_quantity, SUM(subtotal) AS total_sales " +
+                    "FROM order_items " +
+                    "WHERE order_id IN (SELECT order_id FROM orders WHERE status = 'Delivered') " +
+                    "GROUP BY product_id";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int productID = rs.getInt("product_id");
+                int totalQuantity = rs.getInt("total_quantity");
+                double totalSales = rs.getDouble("total_sales");
+
+                Product product = ProductDB.getProductById(productID);
+                salesList.add(new ProductSales(product, totalQuantity, totalSales));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return salesList;
+    }
+
+    public static double calculateTotalSales() throws SQLException {
+        Connection conn = DatabaseConnection.getConnection();
+        double totalSales = 0.0;
+        try {
+            String query = "SELECT SUM(total_amount) AS total_sales FROM orders WHERE status = 'Delivered'";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                totalSales = rs.getDouble("total_sales");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return totalSales;
+    }
+
+    public static double calculateMonthlySales() throws SQLException {
+        Connection conn = DatabaseConnection.getConnection();
+        double monthlySales = 0.0;
+
+        try {
+            String query = "SELECT SUM(total_amount) AS total_sales FROM orders " +
+                    "WHERE status = 'Delivered' AND MONTH(order_date) = MONTH(CURRENT_DATE) " +
+                    "AND YEAR(order_date) = YEAR(CURRENT_DATE)";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                monthlySales += rs.getDouble("total_sales");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return monthlySales;
+    }
+
+    public static double calculateDailySales() throws SQLException {
+        Connection conn = DatabaseConnection.getConnection();
+        double dailySales = 0.0;
+
+        try {
+            String query = "SELECT SUM(total_amount) AS total_sales FROM orders " +
+                    "WHERE status = 'Delivered' AND DATE(order_date) = CURRENT_DATE";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                dailySales += rs.getDouble("total_sales");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dailySales;
+    }
+
+    public static double getProductSalesAmount(int productID) throws SQLException {
+        Connection conn = DatabaseConnection.getConnection();
+        double totalSales = 0.0;
+        try {
+            String query = "SELECT COUNT(subtotal) AS total_sales FROM order_items " +
+                    "WHERE product_id = ? AND order_id IN (SELECT order_id FROM orders WHERE status = 'Delivered')";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, productID);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                totalSales = rs.getDouble("total_sales");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return totalSales;
+    }
+
+    public static int getStatusSummary(String status) throws SQLException {
+        Connection conn = DatabaseConnection.getConnection();
+        int count = 0;
+        try {
+            String query = "SELECT COUNT(order_id) as count FROM orders WHERE status = '" + status + "'";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                count = rs.getInt("count");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return count;
     }
 }
