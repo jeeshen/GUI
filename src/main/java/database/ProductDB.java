@@ -54,7 +54,7 @@ public class ProductDB {
     }
 
     public static Product getProductById(int productId) {
-        String sql = "SELECT * FROM products WHERE id = ? AND status = 'ACTIVE'";
+        String sql = "SELECT * FROM products WHERE id = ?";
         Product product = null;
 
         try (Connection conn = DatabaseConnection.getConnection();

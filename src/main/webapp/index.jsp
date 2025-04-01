@@ -2,6 +2,8 @@
 <%@ page import="main.Product" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.text.DecimalFormat" %>
+<%@ page import="java.util.stream.Collectors" %>
+<%@ page import="java.sql.SQLException" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -10,21 +12,49 @@
         <p class="w-1/2 text-black-500 font-inter text-5xl font-bold pl-30">Jevore. <span class="text-gray-500">Best place to buy the <br/>products you love.</span></p>
         <p class="w-1/2 text-black-500 font-inter text-2xl font-bold pl-30 mt-30 mb-5">Promotions. <span class="text-gray-500">Get goods for better prices.</span></p>
         <div class="flex justify-left gap-8 mx-30">
-            <% for (int i = 0; i < 4; i++) { %>
-                <div class="relative shadow-2xl w-100 h-130 rounded-[1rem] transition duration-300 ease-in-out hover:scale-103">
-                    <div class="text-white absolute top-10 left-10">
-                        <p class="text-3xl font-semibold">jPhone 16 Pro</p>
-                        <p class="text-xl">From RM 3,000</p>
-                    </div>
-                    <img class="object-fill w-full h-full rounded-[1rem]" src="https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/store-card-40-iphone-16-pro-202409?wid=800&hei=1000&fmt=jpeg&qlt=95&.v=1726165763242" alt="promotion">
+            <div class="relative shadow-2xl w-100 h-130 rounded-[1rem] transition duration-300 ease-in-out hover:scale-103">
+                <div class="text-white absolute top-10 left-10">
+                    <p class="text-3xl font-semibold">jPhone 16 Pro</p>
+                    <p class="text-xl">From RM 3,000</p>
                 </div>
-            <% } %>
+                <img class="object-fill w-full h-full rounded-[1rem]" src="https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/store-card-40-iphone-16-pro-202409?wid=800&hei=1000&fmt=jpeg&qlt=95&.v=1726165763242" alt="promotion">
+            </div>
+            <div class="relative shadow-2xl w-100 h-130 rounded-[1rem] transition duration-300 ease-in-out hover:scale-103">
+                <div class="text-black absolute top-10 left-10">
+                    <p class="text-3xl font-semibold">jPad 13</p>
+                    <p class="text-xl">From RM 2,500</p>
+                </div>
+                <img class="object-fill w-full h-full rounded-[1rem]" src="https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/store-card-40-ipad-air-202503?wid=800&hei=1000&fmt=p-jpg&qlt=95&.v=1740783181594" alt="promotion">
+            </div>
+            <div class="relative shadow-2xl w-100 h-130 rounded-[1rem] transition duration-300 ease-in-out hover:scale-103">
+                <div class="text-black absolute top-10 left-10">
+                    <p class="text-3xl font-semibold">jWatch 2</p>
+                    <p class="text-xl">From RM 1,300</p>
+                </div>
+                <img class="object-fill w-full h-full rounded-[1rem]" src="https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/store-card-40-watch-s10-202409?wid=800&hei=1000&fmt=jpeg&qlt=90&.v=1724095131742" alt="promotion">
+            </div>
+            <div class="relative shadow-2xl w-100 h-130 rounded-[1rem] transition duration-300 ease-in-out hover:scale-103">
+                <div class="text-black absolute top-10 left-10">
+                    <p class="text-3xl font-semibold">JPhone 15</p>
+                    <p class="text-xl">From RM 3,300</p>
+                </div>
+                <img class="object-fill w-full h-full rounded-[1rem]" src="https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/store-card-40-iphone-16e-202502?wid=800&hei=1000&fmt=jpeg&qlt=90&.v=1738030155927" alt="promotion">
+            </div>
         </div>
         <p class="w-1/2 text-black-500 font-inter text-2xl font-bold pl-30 mt-30 mb-5">Top Product. <span class="text-gray-500">Product loved by majority.</span></p>
         <div class="grid grid-cols-4 gap-8 ml-30 mr-20">
             <%
                 DecimalFormat formatter = new DecimalFormat("#,##0.00");
-                List<Product> productList = OrderDB.getTopSoldProducts(4);
+                List<Product> productList = null;
+                try {
+                    productList = OrderDB.getTopSoldProducts(4)
+                            .stream()
+                            .filter(product -> !"DELETED".equals(product.getStatus()))
+                            .collect(Collectors.toList());
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
                 if (productList != null && !productList.isEmpty()) {
                     for (Product product : productList) {
             %>
