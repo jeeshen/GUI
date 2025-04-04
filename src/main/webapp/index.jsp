@@ -55,8 +55,8 @@
 
                 if (productList != null && !productList.isEmpty()) {
             %>
-                <p class="w-1/2 text-black-500 font-inter text-2xl font-bold pl-30 mt-30 mb-5">Top Product. <span class="text-gray-500">Product loved by majority.</span></p>
-                <div class="grid grid-cols-4 gap-8 ml-30 mr-20">
+            <p class="w-1/2 text-black-500 font-inter text-2xl font-bold pl-30 mt-30 mb-5">Top Product. <span class="text-gray-500">Product loved by majority.</span></p>
+            <div class="grid grid-cols-4 gap-8 ml-30 mr-20">
             <%
                     for (Product product : productList) {
             %>
