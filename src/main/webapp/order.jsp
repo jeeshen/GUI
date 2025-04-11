@@ -95,6 +95,16 @@
               </div>
             </td>
           </tr>
+          <%
+            }
+
+            if (orderList.isEmpty()) {
+          %>
+          <tr>
+            <td colspan="5">
+              No orders found!
+            </td>
+          </tr>
           <% } %>
           </tbody>
         </table>

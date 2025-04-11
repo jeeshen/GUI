@@ -13,7 +13,6 @@
     } catch (SQLException e) {
         throw new RuntimeException(e);
     }
-    Order editingOrder = new Order();
 %>
 <html>
     <%--    View sales and quantity sold of each products here--%>
@@ -65,12 +64,5 @@
                 </table>
             </div>
         </div>
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                <% if (editingOrder != null && editingOrder.getOrderID() != 0) { %>
-                edit_status.showModal();
-                <% } %>
-            });
-        </script>
     </body>
 </html>

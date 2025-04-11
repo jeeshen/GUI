@@ -17,7 +17,7 @@
 
         List<Product> top10ProductList = new ArrayList<>();
         try {
-            top10ProductList = OrderDB.getTopSoldProducts(10);
+            top10ProductList = OrderDB.getTopSoldProducts(10, false);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

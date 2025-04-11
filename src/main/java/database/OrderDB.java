@@ -176,11 +176,26 @@ public class OrderDB {
     }
 
     //To get the list of top sold products from database, with parameter to get how many products
-    public static List<Product> getTopSoldProducts(int top) throws SQLException {
+    public static List<Product> getTopSoldProducts(int top, boolean option) throws SQLException {
         List<Product> topProducts = new ArrayList<>();
         Connection conn = DatabaseConnection.getConnection();
         try {
-            String query = "SELECT product_id, SUM(quantity) AS total_sold FROM order_items GROUP BY product_id ORDER BY total_sold DESC LIMIT ?";
+            String query =
+                    "SELECT oi.product_id, SUM(oi.quantity) AS total_sold " +
+                            "FROM order_items oi " +
+                            "JOIN products p ON oi.product_id = p.id " +
+                            "JOIN orders o ON oi.order_id = o.order_id ";
+
+            if (option) {
+                query += "WHERE p.status = 'ACTIVE' AND o.status = 'DELIVERED' ";
+            } else {
+                query += "WHERE o.status = 'DELIVERED' ";
+            }
+
+            query += "GROUP BY oi.product_id " +
+                    "ORDER BY total_sold DESC " +
+                    "LIMIT ?";
+
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setInt(1, top);
             ResultSet rs = stmt.executeQuery();

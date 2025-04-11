@@ -46,10 +46,7 @@
                 DecimalFormat formatter = new DecimalFormat("#,##0.00");
                 List<Product> productList = null;
                 try {
-                    productList = OrderDB.getTopSoldProducts(4)
-                            .stream()
-                            .filter(product -> !"DELETED".equals(product.getStatus()))
-                            .collect(Collectors.toList());
+                    productList = OrderDB.getTopSoldProducts(4, true);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
