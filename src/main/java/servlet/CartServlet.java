@@ -22,6 +22,7 @@ public class CartServlet extends HttpServlet {
             session.setAttribute("cart", cart);
         }
 
+        //Check which action should be done by servlet
         if (request.getParameter("action").equals("add")) {
             int productId = Integer.parseInt(request.getParameter("productID"));
             int quantity = Integer.parseInt(request.getParameter("quantity"));

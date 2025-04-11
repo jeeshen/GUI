@@ -2,6 +2,7 @@
 <%@ page import="main.UserInfo, main.Product, java.util.Map, java.text.DecimalFormat" %>
 <%@ page session="true" %>
 <html>
+    <%--Let user to enter payment method info before submitting order--%>
     <%@ include file="components/header.jsp" %>
     <%
         DecimalFormat df = new DecimalFormat("0.00");

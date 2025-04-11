@@ -9,6 +9,7 @@ import java.util.List;
 
 public class AccountDB {
 
+    //Will search account by email from database
     public static Account getAccountByEmail(String email) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -39,6 +40,7 @@ public class AccountDB {
         return account;
     }
 
+    //Will search account using ID from database
     public static Account getAccountById(int id) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -69,6 +71,7 @@ public class AccountDB {
         return account;
     }
 
+    //To check whether the user entered the correct credentials
     public static boolean validateUser(String email, String password) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -92,6 +95,7 @@ public class AccountDB {
         return isValid;
     }
 
+    //To get the role of the user using email
     public static String getUserRole(String email) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -116,6 +120,7 @@ public class AccountDB {
         return role;
     }
 
+    //To get user list from database no matter what role
     public static List<Account> getAllUsers() {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -146,6 +151,7 @@ public class AccountDB {
         return users;
     }
 
+    //To get staff list from database
     public static List<Account> getAllStaffsOnly() {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -176,6 +182,7 @@ public class AccountDB {
         return users;
     }
 
+    //To get user only list
     public static List<Account> getAllUsersOnly() {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -206,6 +213,7 @@ public class AccountDB {
         return users;
     }
 
+    //To register a new user from register page
     public static boolean registerUser(String email, String username, String password) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -232,6 +240,7 @@ public class AccountDB {
         }
     }
 
+    //To register user from the manage page
     public static boolean registerUser(Account account) {
         String sql = "INSERT INTO users (username, email, password, role, status) VALUES (?, ?, ?, ?, ?)";
 
@@ -254,6 +263,7 @@ public class AccountDB {
         }
     }
 
+    //To update user info from manage page
     public static boolean updateUser(Account account) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -279,6 +289,7 @@ public class AccountDB {
         }
     }
 
+    //To delete user from manage page
     public static boolean deleteUser(String email) {
         String sql = "UPDATE users SET status = 'DELETED' WHERE email = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -292,6 +303,7 @@ public class AccountDB {
         return false;
     }
 
+    //Close database connection
     private static void closeResources(ResultSet rs, PreparedStatement pstmt, Connection conn) {
         try {
             if (rs != null) rs.close();

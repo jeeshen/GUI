@@ -21,6 +21,7 @@ public class StatusServlet extends HttpServlet {
         String status = request.getParameter("status");
         int orderID = Integer.parseInt(request.getParameter("orderID"));
 
+        //Update order status
         try {
             boolean success = OrderDB.updateOrderStatus(orderID,status);
             if (success) {

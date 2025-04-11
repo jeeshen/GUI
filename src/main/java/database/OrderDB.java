@@ -14,6 +14,8 @@ import java.util.Date;
 import java.util.List;
 
 public class OrderDB {
+
+    //Handle placing order
     public static boolean placeOrder(Order order) throws SQLException {
         Connection conn = DatabaseConnection.getConnection();
         conn.setAutoCommit(false);
@@ -60,6 +62,7 @@ public class OrderDB {
         }
     }
 
+    //Get order list from database
     public static List<Order> getAllOrders() throws SQLException {
         List<Order> orders = new ArrayList<>();
         Connection conn = DatabaseConnection.getConnection();
@@ -85,6 +88,7 @@ public class OrderDB {
         return orders;
     }
 
+    //Get order list by user ID
     public static List<Order> getAllOrdersByCustomer(int userID) throws SQLException {
         List<Order> orders = new ArrayList<>();
         Connection conn = DatabaseConnection.getConnection();
@@ -110,6 +114,7 @@ public class OrderDB {
         return orders;
     }
 
+    //Get order by order ID
     public static Order getOrderById(int orderID) throws SQLException {
         Connection conn = DatabaseConnection.getConnection();
         try {
@@ -134,6 +139,7 @@ public class OrderDB {
         return null;
     }
 
+    //Get ordered items of a specific order using order ID
     public static List<OrderItem> getOrderItems(int orderID) throws SQLException {
         Connection conn = DatabaseConnection.getConnection();
         List<OrderItem> items = new ArrayList<>();
@@ -153,6 +159,7 @@ public class OrderDB {
         return items;
     }
 
+    //To change order status from manage page
     public static boolean updateOrderStatus(int orderID, String newStatus) throws SQLException {
         Connection conn = DatabaseConnection.getConnection();
         try {
@@ -168,6 +175,7 @@ public class OrderDB {
         }
     }
 
+    //To get the list of top sold products from database, with parameter to get how many products
     public static List<Product> getTopSoldProducts(int top) throws SQLException {
         List<Product> topProducts = new ArrayList<>();
         Connection conn = DatabaseConnection.getConnection();
@@ -188,6 +196,7 @@ public class OrderDB {
         return topProducts;
     }
 
+    //Get the sales list of each product
     public static List<ProductSales> calculateSalesByProduct() throws SQLException {
         Connection conn = DatabaseConnection.getConnection();
         List<ProductSales> salesList = new ArrayList<>();
@@ -214,6 +223,7 @@ public class OrderDB {
         return salesList;
     }
 
+    //Calculate the total sales of all products
     public static double calculateTotalSales() throws SQLException {
         Connection conn = DatabaseConnection.getConnection();
         double totalSales = 0.0;
@@ -231,6 +241,7 @@ public class OrderDB {
         return totalSales;
     }
 
+    //To calculate monthly sales of all products
     public static double calculateMonthlySales() throws SQLException {
         Connection conn = DatabaseConnection.getConnection();
         double monthlySales = 0.0;
@@ -251,6 +262,7 @@ public class OrderDB {
         return monthlySales;
     }
 
+    //Tp calculate daily sales of all products
     public static double calculateDailySales() throws SQLException {
         Connection conn = DatabaseConnection.getConnection();
         double dailySales = 0.0;
@@ -270,6 +282,7 @@ public class OrderDB {
         return dailySales;
     }
 
+    //To get sales amount of specific product
     public static double getProductSalesAmount(int productID) throws SQLException {
         Connection conn = DatabaseConnection.getConnection();
         double totalSales = 0.0;
@@ -289,6 +302,7 @@ public class OrderDB {
         return totalSales;
     }
 
+    //To get the number of order of a specific status
     public static int getStatusSummary(String status) throws SQLException {
         Connection conn = DatabaseConnection.getConnection();
         int count = 0;

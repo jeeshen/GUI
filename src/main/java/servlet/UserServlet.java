@@ -17,6 +17,7 @@ import database.AccountDB;
 @WebServlet("/UserServlet")
 public class UserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //Check which action should run
         if (request.getParameter("action").equals("add")) {
             String name = request.getParameter("name");
             String email = request.getParameter("email");
@@ -25,6 +26,7 @@ public class UserServlet extends HttpServlet {
             Account account = new Account(email, name, password, "USER", "ACTIVE");
             boolean success = AccountDB.registerUser(account);
 
+            //If error then show error then return back
             if (!success) {
                 request.getSession().setAttribute("errorMessage", "Email already exists!");
                 response.sendRedirect("/admin/user.jsp");
@@ -45,12 +47,14 @@ public class UserServlet extends HttpServlet {
             String email = request.getParameter("email");
             String password = request.getParameter("password");
 
+            //Make sure no duplicated email
             Account account = AccountDB.getAccountByEmail(email);
             if (account != null) {
                 request.getSession().setAttribute("errorMessage", "Email already exists!");
                 response.sendRedirect("/admin/user.jsp");
             }
             else {
+                //If no duplicate email found, then update account info
                 account = AccountDB.getAccountById(id);
                 account.setUsername(name);
                 account.setEmail(email);
@@ -60,6 +64,7 @@ public class UserServlet extends HttpServlet {
                 response.sendRedirect("/admin/user.jsp");
             }
         } else if (request.getParameter("action").equals("addStaff")) {
+            //Allow manager to add staff from manage page
             String name = request.getParameter("name");
             String email = request.getParameter("email");
             String password = request.getParameter("password");
@@ -76,6 +81,7 @@ public class UserServlet extends HttpServlet {
                 response.sendRedirect("/admin/staff.jsp");
             }
         } else if (request.getParameter("action").equals("updateStaff")) {
+            //Allow manager to update staff info from manage page
             int id = Integer.parseInt(request.getParameter("id"));
             String name = request.getParameter("name");
             String email = request.getParameter("email");
@@ -96,6 +102,7 @@ public class UserServlet extends HttpServlet {
                 response.sendRedirect("/admin/staff.jsp");
             }
         } else if (request.getParameter("action").equals("delete")) {
+            //Allow manager to delete staff from manage page
             String email = request.getParameter("email");
             AccountDB.deleteUser(email);
             request.getSession().setAttribute("successMessage", "Staff deleted successfully!");

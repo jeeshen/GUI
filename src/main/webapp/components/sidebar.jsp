@@ -1,3 +1,4 @@
+<%--Sidebar for manage page and show pages that allowed by each roles--%>
 <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 font-inter">
     <div class="pr-10 mx-auto">
         <div class="flex items-center justify-between">

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+//To build connections with database
 public class DatabaseConnection {
     private static final String URL = "jdbc:mysql://127.0.0.1:3306/jevore";
     private static final String USER = "nbuser";

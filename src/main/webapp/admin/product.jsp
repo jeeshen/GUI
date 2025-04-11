@@ -7,6 +7,7 @@
   Product editingProduct = new Product();
 %>
 <html>
+  <%--Manage products here, able to add, update and delete products--%>
   <%@ include file="../components/head.jsp" %>
   <body style="margin: 0">
     <%@ page contentType="text/html;charset=UTF-8" language="java" %>

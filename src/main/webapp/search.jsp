@@ -5,6 +5,7 @@
 <%@ page import="java.text.DecimalFormat" %>
 <!DOCTYPE html>
 <html>
+    <%--Search function that will show products based on keyword--%>
     <%@ include file="components/header.jsp" %>
     <body class="bg-base-100 pb-150">
         <%

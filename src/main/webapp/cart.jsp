@@ -2,6 +2,7 @@
 <%@ page import="main.Cart,main.UserInfo, main.Product, java.util.Map, java.text.DecimalFormat" %>
 <%@ page session="true" %>
 <html>
+    <%--Display cart items and calculate the price, and select payment method--%>
     <%@ include file="components/header.jsp" %>
     <body class="bg-base-100 pb-150 font-inter">
         <div class="flex gap-10 mx-30">

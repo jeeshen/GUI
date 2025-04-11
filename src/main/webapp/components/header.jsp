@@ -7,6 +7,7 @@
         session.setAttribute("cart", cart);
     }
 %>
+<%--Header for every page and show user status dynamically--%>
 <div class="flex justify-between mb-10 font-inter">
     <img class="ml-10 object-cover" src="../images/logo.png" style="width: 150px; height: 90px;">
     <div class="w-1/2 my-8 flex justify-evenly">

@@ -7,6 +7,7 @@
 <%@ page import="main.OrderItem" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
+  <%--Show order info of that specific user--%>
   <%@ include file="components/header.jsp" %>
   <%
       List<Order> orderList = null;

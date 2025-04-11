@@ -5,6 +5,7 @@
 <%@ page import="jakarta.servlet.http.Cookie" %>
 <!DOCTYPE html>
 <html>
+    <%--Account page for user to login and register--%>
     <%@ include file="components/header.jsp" %>
     <body class="bg-white font-inter pb-150">
         <%
@@ -16,6 +17,7 @@
             String rememberedEmail = "";
             boolean isRemembered = false;
 
+            //Logged user, when cookie is found
             Cookie[] cookies = request.getCookies();
             if (cookies != null) {
                 for (Cookie cookie : cookies) {
@@ -34,6 +36,7 @@
                 }
             }
 
+            //Handle sign up and log in function
             String formAction = request.getParameter("formAction");
             if (formAction != null) {
                 if ("signin".equals(formAction)) {

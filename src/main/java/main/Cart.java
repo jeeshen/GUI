@@ -6,38 +6,33 @@ import java.util.Map;
 public class Cart {
     private Map<Product, Integer> items;
 
+    //Constructors
     public Cart() {
         this.items = new HashMap<>();
     }
 
+    //To add product into cart
     public void addProduct(Product product, int quantity) {
         if (product != null && quantity > 0) {
             items.put(product, items.getOrDefault(product, 0) + quantity);
         }
     }
 
+    //To remove product from cart
     public void removeProduct(Product product) {
         if (product != null && items.containsKey(product)) {
             items.remove(product);
         }
     }
 
-    public void updateQuantity(Product product, int quantity) {
-        if (product != null && items.containsKey(product)) {
-            if (quantity > 0) {
-                items.put(product, quantity);
-            } else {
-                items.remove(product);
-            }
-        }
-    }
-
+    //Add 1 quantity of a specific product
     public void plusQuantity(Product product, int quantity) {
         if (product != null && quantity > 0) {
             items.put(product, items.getOrDefault(product, 0) + quantity);
         }
     }
 
+    //Minus 1 quantity of a specific product
     public void minusQuantity(Product product, int quantity) {
         if (product != null && items.containsKey(product)) {
             int newQuantity = items.get(product) - quantity;
@@ -50,7 +45,7 @@ public class Cart {
         }
     }
 
-
+    //Calculate total of the cart
     public double calculateTotal() {
         double total = 0;
         for (Map.Entry<Product, Integer> entry : items.entrySet()) {
@@ -59,22 +54,7 @@ public class Cart {
         return total;
     }
 
-    public void clearCart() {
-        items.clear();
-    }
-
-    public void displayCart() {
-        if (items.isEmpty()) {
-            System.out.println("Cart is empty.");
-        } else {
-            System.out.println("Cart Items:");
-            for (Map.Entry<Product, Integer> entry : items.entrySet()) {
-                System.out.println(entry.getKey().getName() + " - Quantity: " + entry.getValue() + ", Price: " + entry.getKey().getPrice());
-            }
-            System.out.println("Total: " + calculateTotal());
-        }
-    }
-
+    //Get number of products in cart
     public int getTotalQuantity() {
         int totalQuantity = 0;
         for (int quantity : items.values()) {
@@ -83,7 +63,7 @@ public class Cart {
         return totalQuantity;
     }
 
-
+    //Get the list of products and its quantity in cart
     public Map<Product, Integer> getItems() {
         return items;
     }

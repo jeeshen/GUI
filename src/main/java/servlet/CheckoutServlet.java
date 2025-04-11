@@ -21,16 +21,19 @@ public class CheckoutServlet extends HttpServlet {
         String email = (String) session.getAttribute("user");
         Account user = AccountDB.getAccountByEmail(email);
 
+        //If cart is empty then return back to the page
         if (cart == null || cart.getItems().isEmpty()) {
             response.sendRedirect("cart.jsp");
             return;
         }
 
+        //If user didnt login then bring user to login page
         if (user == null) {
             response.sendRedirect("login.jsp");
             return;
         }
 
+        //Add products into cart
         Order order = new Order(user.getId());
         for (Map.Entry<Product, Integer> entry : cart.getItems().entrySet()) {
             Product product = entry.getKey();
@@ -39,6 +42,7 @@ public class CheckoutServlet extends HttpServlet {
             order.addItem(product, quantity);
         }
 
+        //Place order and clear cart
         boolean orderPlaced = false;
         try {
             orderPlaced = OrderDB.placeOrder(order);

@@ -10,6 +10,7 @@ public class Product implements Serializable {
     private String imageUrl;
     private String status;
 
+    //Constructors
     public Product(int id, String name, String description, double price, int stockQuantity, String imageUrl, String status) {
         this.id = id;
         this.name = name;
@@ -24,6 +25,7 @@ public class Product implements Serializable {
         this(0, "", "", 0, 0, "", "");
     }
 
+    //Getter and setter
     public int getId() {
         return id;
     }

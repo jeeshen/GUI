@@ -7,6 +7,7 @@ public class UserInfo implements Serializable {
     private String phoneNumber;
     private String address;
 
+    //Constructors
     public UserInfo() {}
 
     public UserInfo(String name, String phoneNumber, String address) {
@@ -15,6 +16,7 @@ public class UserInfo implements Serializable {
         this.address = address;
     }
 
+    //Getter and setter
     public String getName() {
         return name;
     }

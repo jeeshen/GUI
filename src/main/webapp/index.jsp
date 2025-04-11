@@ -7,6 +7,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
+    <%--Home page to display promotions, top sold products--%>
     <%@ include file="components/header.jsp" %>
     <body class="bg-base-100 pb-20">
         <p class="w-1/2 text-black-500 font-inter text-5xl font-bold pl-30">Jevore. <span class="text-gray-500">Best place to buy the <br/>products you love.</span></p>

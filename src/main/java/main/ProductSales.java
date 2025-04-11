@@ -5,12 +5,14 @@ public class ProductSales {
     private int totalQuantity;
     private double totalSales;
 
+    //Constructors
     public ProductSales(Product product, int totalQuantity, double totalSales) {
         this.product = product;
         this.totalQuantity = totalQuantity;
         this.totalSales = totalSales;
     }
 
+    //Getter and setter
     public Product getProduct() {
         return product;
     }

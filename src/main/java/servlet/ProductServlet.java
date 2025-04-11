@@ -22,6 +22,7 @@ import database.ProductDB;
 )
 public class ProductServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //Check which action should be done
         if (request.getParameter("action").equals("add")) {
             String name = request.getParameter("name");
             String description = request.getParameter("description");
@@ -33,6 +34,7 @@ public class ProductServlet extends HttpServlet {
 
             String imagePath = "";
 
+            //If user uploaded an image then run this to store image locally
             if (filePart != null && filePart.getSize() > 0 && filePart.getSubmittedFileName() != null && !filePart.getSubmittedFileName().isEmpty()) {
                 String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
                 String uploadDir = getServletContext().getRealPath("") + File.separator + "uploads";
@@ -44,6 +46,7 @@ public class ProductServlet extends HttpServlet {
                 imagePath = "uploads/" + fileName;
             }
 
+            //Add product to database
             Product product = new Product(0, name, description, price, quantity, imagePath, "active");
             ProductDB.addProduct(product);
 
@@ -53,6 +56,7 @@ public class ProductServlet extends HttpServlet {
             String productIdParam = request.getParameter("productID");
             String[] selectedProductIds = request.getParameterValues("selectedProduct");
 
+            //Delete selected product
             if (selectedProductIds != null && selectedProductIds.length > 0) {
                 for (String id : selectedProductIds) {
                     int productId = Integer.parseInt(id);
@@ -82,6 +86,7 @@ public class ProductServlet extends HttpServlet {
 
             String imagePath = "";
 
+            //Check if user uploaded an image
             if (filePart != null && filePart.getSize() > 0 && filePart.getSubmittedFileName() != null && !filePart.getSubmittedFileName().isEmpty()) {
                 String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
                 String uploadDir = getServletContext().getRealPath("") + File.separator + "uploads";

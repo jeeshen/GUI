@@ -1,4 +1,5 @@
 <head>
+    <%--To display page title dynamically and to store libraries--%>
     <%@ include file="auth.jsp"%>
     <%
         String path = request.getRequestURI();

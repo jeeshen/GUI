@@ -6,6 +6,7 @@
 <%@ page import="java.text.DecimalFormat" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
+    <%--    Dashboard of manage page, to get sales and top sold products and display them in charts--%>
     <%@ include file="../components/head.jsp" %>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <%

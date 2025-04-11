@@ -1,5 +1,6 @@
 <%@ page import="jakarta.servlet.http.HttpSession" %>
 <%@ page import="jakarta.servlet.http.Cookie" %>
+<%--To check whether user has permission to access the page--%>
 <%
   HttpSession userSession = request.getSession();
   String sessionName = (String) userSession.getAttribute("user");

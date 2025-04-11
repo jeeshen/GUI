@@ -8,6 +8,7 @@
     Order editingOrder = new Order();
 %>
 <html>
+    <%--Manage order page, to get the lists of orders and update status here--%>
     <%@ include file="../components/head.jsp" %>
     <body style="margin: 0">
         <%@ page contentType="text/html;charset=UTF-8" language="java" %>

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDB {
+    //To add a new product from manage page
     public static void addProduct(Product product) {
         String sql = "INSERT INTO products (name, description, price, stock_quantity, image_url, status) VALUES (?, ?, ?, ?, ?, 'ACTIVE')";
 
@@ -26,6 +27,7 @@ public class ProductDB {
         }
     }
 
+    //Get the list of products
     public static List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
         String sql = "SELECT * FROM products WHERE status = 'ACTIVE'";
@@ -53,6 +55,7 @@ public class ProductDB {
         return products;
     }
 
+    //Get the product using product ID
     public static Product getProductById(int productId) {
         String sql = "SELECT * FROM products WHERE id = ?";
         Product product = null;
@@ -82,6 +85,7 @@ public class ProductDB {
         return product;
     }
 
+    //Search a product using keyword
     public static List<Product> searchProducts(String keyword) {
         List<Product> products = new ArrayList<>();
         String sql = "SELECT * FROM products WHERE name LIKE ? AND status = 'ACTIVE'";
@@ -111,6 +115,7 @@ public class ProductDB {
         return products;
     }
 
+    //Update product info from manage page
     public static void updateProduct(Product product) {
         String sql = "UPDATE products SET name = ?, description = ?, price = ?, stock_quantity = ?, image_url = ? WHERE id = ? AND status = 'ACTIVE'";
 
@@ -135,7 +140,7 @@ public class ProductDB {
         }
     }
 
-
+    //Handle stock update after user ordered the product
     public static void updateStock(int productId, int newStock) {
         String sql = "UPDATE products SET stock_quantity = ? WHERE id = ?";
 
@@ -153,6 +158,7 @@ public class ProductDB {
         }
     }
 
+    //Delete product from manage page
     public static void deleteProduct(int productId) {
         String sql = "UPDATE products SET status = 'DELETED' WHERE id = ?";
 

@@ -10,6 +10,7 @@ public class Account implements Serializable {
     private String status;
     private String createdAt;
 
+    //Constructors
     public Account(int id, String email, String username, String password, String role, String status, String createdAt) {
         this.id = id;
         this.email = email;
@@ -32,6 +33,7 @@ public class Account implements Serializable {
         this(0, "", "", "", "", "", "");
     }
 
+    //Getter and setter
     public int getId() {
         return id;
     }

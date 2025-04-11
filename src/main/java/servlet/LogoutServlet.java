@@ -11,7 +11,7 @@ public class LogoutServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
 
-        System.out.println(session.getAttribute("user"));
+        //If user is logged in, then clear the cookies
         if (session != null) {
             session.invalidate();
             Cookie cookie = new Cookie("rememberedUser", "");

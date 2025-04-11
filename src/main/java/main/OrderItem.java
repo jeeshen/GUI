@@ -5,12 +5,14 @@ public class OrderItem {
     private int quantity;
     private double subtotal;
 
+    //Constructors
     public OrderItem(Product product, int quantity) {
         this.product = product;
         this.quantity = quantity;
         this.subtotal = product.getPrice() * quantity;
     }
 
+    //Getter and setter
     public Product getProduct() {
         return product;
     }

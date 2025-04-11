@@ -12,6 +12,7 @@ public class Order {
     private Date orderDate;
     private String status;
 
+    //Constructors
     public Order(int userID) {
         this.userID = userID;
         this.orderItems = new ArrayList<>();
@@ -39,6 +40,7 @@ public class Order {
         this(0, 0, 0, "Pending");
     }
 
+    //Getter and setter
     public int getOrderID() {
         return orderID;
     }
@@ -71,6 +73,7 @@ public class Order {
         this.status = status;
     }
 
+    //To add product into order
     public void addItem(Product product, int quantity) {
         for (OrderItem item : orderItems) {
             if (item.getProduct().getId() == product.getId()) {
@@ -83,6 +86,7 @@ public class Order {
         updateTotalAmount();
     }
 
+    //To remove product into order
     public void removeItem(int productId) {
         orderItems.removeIf(item -> item.getProduct().getId() == productId);
         updateTotalAmount();
