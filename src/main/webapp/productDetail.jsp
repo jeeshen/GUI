@@ -25,12 +25,12 @@
 
     <% if (product != null) { %>
     <div class="flex gap-10 mx-90">
-      <div class="w-2/3">
+      <div class="w-full">
         <img class="object-contain h-auto w-full"
              src="<%= !product.getImageUrl().isEmpty() ? request.getContextPath() + "/" + product.getImageUrl() : "images/empty product.png" %>"
              alt="<%= product.getName() %>" />
       </div>
-      <div class="w-1/2 bg-base-200 p-10 rounded-lg">
+      <div class="w-full bg-base-200 p-10 rounded-lg">
         <p class="text-3xl font-bold"><%=product.getName()%></p>
         <div class="flex justify-between my-5">
           <p class="text-2xl font-semibold"><span class="text-lg">RM</span> <%=formatter.format(product.getPrice())%></p>
