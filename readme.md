@@ -38,7 +38,8 @@ It follows standard **Java EE architecture** with **Servlets** and **JSP**, and 
        email VARCHAR(255) NOT NULL UNIQUE,
        password VARCHAR(255) NOT NULL,
        role VARCHAR(50) DEFAULT 'USER',
-       status VARCHAR(50) DEFAULT 'ACTIVE'
+       status VARCHAR(50) DEFAULT 'ACTIVE',
+       createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
    );
 
    CREATE TABLE jevore.products (

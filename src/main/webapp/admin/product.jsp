@@ -130,9 +130,59 @@
         <button>close</button>
       </form>
     </dialog>
+    <%
+      String action = request.getParameter("action") == null ? "" : request.getParameter("action");
+      String action2 = request.getParameter("action2") == null ? "" : request.getParameter("action2");
+      String[] selectedProducts = request.getParameterValues("selectedProduct");
+      String productID = request.getParameter("productID") == null ? "" : request.getParameter("productID");
+
+      if (selectedProducts == null) {
+        selectedProducts = new String[0];
+        if (!productID.isEmpty()) {
+          String[] mergedProducts = Arrays.copyOf(selectedProducts, selectedProducts.length + 1);
+          mergedProducts[selectedProducts.length] = productID;
+          selectedProducts = mergedProducts;
+        }
+      }
+    %>
+    <dialog id="delete_product" class="modal">
+      <div class="modal-box" style="width: 350px">
+        <h3 class="text-lg font-bold flex justify-center">Product Delete Confirmation</h3>
+        <div class="flex justify-center flex-col text-center">
+          <h3>Are you sure you want to delete following?</h3>
+          <form method="post" action="${pageContext.request.contextPath}/ProductServlet">
+            <%
+              for (String product: selectedProducts) {
+                Product selectedProduct = ProductDB.getProductById(Integer.parseInt(product));
+            %>
+            <div class="flex items-center gap-3 px-20 my-4">
+              <div class="avatar">
+                <div class="mask mask-squircle h-12 w-12 my-2">
+                  <img
+                          src="<%= !selectedProduct.getImageUrl().isEmpty() ? request.getContextPath() + "/" + selectedProduct.getImageUrl() : "../images/empty product.png" %>"
+                          alt="Product Image" />
+                </div>
+              </div>
+              <div>
+                <div class="font-bold"><%=selectedProduct.getName()%></div>
+              </div>
+            </div>
+            <input type="hidden" name="selectedProduct" value="<%= selectedProduct.getId() %>">
+            <%
+              }
+            %>
+            <input type="hidden" name="action" value="delete"/>
+            <button type="submit" class="btn btn-neutral w-full mt-4">Delete Product</button>
+          </form>
+        </div>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
     <div class="ml-70 font-inter">
       <div class="overflow-x-auto mt-4">
-        <form method="post" action="${pageContext.request.contextPath}/ProductServlet">
+        <form method="get" action="product.jsp">
           <table class="table">
             <thead>
               <tr>
@@ -186,7 +236,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
                       </a>
                     </div>
-                    <form method="post" action="${pageContext.request.contextPath}/ProductServlet">
+                    <form method="get" action="product.jsp">
                       <input type="hidden" name="action" value="delete"/>
                       <input type="hidden" name="productID" value="<%= product.getId() %>"/>
                       <button type="submit">
@@ -199,7 +249,7 @@
             <% } %>
               <tr>
                 <td>
-                    <input type="hidden" name="action" value="delete"/>
+                    <input type="hidden" name="action2" value="delete"/>
                     <button type="submit" id="deleteSelected" class="hidden">
                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2 text-red-500"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
                     </button>
@@ -218,8 +268,12 @@
     </div>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        <% if (editingProduct != null && editingProduct.getId() != 0) { %>
-        edit_product.showModal();
+        <% if (editingProduct != null && editingProduct.getId() != 0 && !action.equals("delete")) { %>
+          edit_product.showModal();
+        <% } %>
+
+        <% if (action2.equals("delete") || action.equals("delete") ) { %>
+          delete_product.showModal();
         <% } %>
       });
 

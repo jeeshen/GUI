@@ -113,95 +113,119 @@
         <button>close</button>
       </form>
     </dialog>
+    <%
+      String action = request.getParameter("action") == null ? "" : request.getParameter("action");
+      String selectedEmail = request.getParameter("email") == null ? "" : request.getParameter("email");
+      Account selectedAccount = new Account();
+      if (!selectedEmail.isEmpty()) {
+        selectedAccount = AccountDB.getAccountByEmail(selectedEmail);
+      }
+    %>
+    <dialog id="delete_user" class="modal">
+      <div class="modal-box" style="width: 350px">
+        <h3 class="text-lg font-bold flex justify-center">User Delete Confirmation</h3>
+        <div class="flex justify-center">
+          <form method="post" action="${pageContext.request.contextPath}/UserServlet">
+            <div class="text-center">
+              <h3 class="w-full">Are you sure you want to delete following?</h3>
+              <div class="font-bold"><%=selectedAccount.getUsername()%></div>
+            </div>
+            <input type="hidden" name="email" value="<%= selectedAccount.getEmail() %>">
+            <input type="hidden" name="action" value="delete"/>
+            <button type="submit" class="btn btn-neutral w-full mt-4">Delete User</button>
+          </form>
+        </div>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
     <div class="ml-70 font-inter">
       <div class="overflow-x-auto mt-4">
-        <form method="post" action="${pageContext.request.contextPath}/ProductServlet">
-          <table class="table">
-            <thead>
-            <tr>
-              <th></th>
-              <th>Username</th>
-              <th>Email</th>
-              <th>Joined On</th>
-              <th>Role</th>
-              <th>Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            <%
-              for (Account account : accountList) {
-            %>
-            <tr>
-              <td></td>
-              <td>
-                <%=account.getUsername()%>
-              </td>
-              <td>
-                <%=account.getEmail()%>
-              </td>
-              <td>
-                <%@ page import="java.text.SimpleDateFormat" %>
-                <%@ page import="java.util.Date" %>
-                <%
-                  String createdAtStr = account.getCreatedAt();
-                  SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                  SimpleDateFormat newFormat = new SimpleDateFormat("EEEE, MMMM dd, yyyy hh:mm a");
+        <table class="table">
+          <thead>
+          <tr>
+            <th></th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Joined On</th>
+            <th>Role</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <%
+            for (Account account : accountList) {
+          %>
+          <tr>
+            <td></td>
+            <td>
+              <%=account.getUsername()%>
+            </td>
+            <td>
+              <%=account.getEmail()%>
+            </td>
+            <td>
+              <%@ page import="java.text.SimpleDateFormat" %>
+              <%@ page import="java.util.Date" %>
+              <%
+                String createdAtStr = account.getCreatedAt();
+                SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat newFormat = new SimpleDateFormat("EEEE, MMMM dd, yyyy hh:mm a");
 
-                  Date createdAt = originalFormat.parse(createdAtStr);
-                  String formattedDate = newFormat.format(createdAt);
-                %>
-                <%= formattedDate %>
-              </td>
-              <td>
-                <%
-                  String role = account.getRole();
-                  if (role != null && !role.isEmpty()) {
-                    role = role.substring(0, 1).toUpperCase() + role.substring(1).toLowerCase();
-                  }
-                %>
-                <%= role %>
-              </td>
-              <td>
-                <div class="flex gap-4">
-                  <div>
-                    <a href="<%= request.getRequestURL().toString() %>?email=<%= account.getEmail() %>" type="button">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
-                    </a>
-                  </div>
-                  <form method="post" action="${pageContext.request.contextPath}/UserServlet">
-                    <input type="hidden" name="action" value="delete"/>
-                    <input type="hidden" name="email" value="<%= account.getEmail() %>"/>
-                    <button type="submit">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
-                    </button>
-                  </form>
+                Date createdAt = originalFormat.parse(createdAtStr);
+                String formattedDate = newFormat.format(createdAt);
+              %>
+              <%= formattedDate %>
+            </td>
+            <td>
+              <%
+                String role = account.getRole();
+                if (role != null && !role.isEmpty()) {
+                  role = role.substring(0, 1).toUpperCase() + role.substring(1).toLowerCase();
+                }
+              %>
+              <%= role %>
+            </td>
+            <td>
+              <div class="flex gap-4">
+                <div>
+                  <a href="<%= request.getRequestURL().toString() %>?email=<%= account.getEmail() %>" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
+                  </a>
                 </div>
-              </td>
-            </tr>
-            <% } %>
-            <tr>
-              <td>
-                <input type="hidden" name="action" value="delete"/>
-                <button type="submit" id="deleteSelected" class="hidden">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2 text-red-500"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
-                </button>
-              </td>
-              <td class="text-gray col-span-4 justify-left text-md">
-                <a onclick="add_user.showModal()" class="flex items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus mr-2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                  Add new user
-                </a>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </form>
+                <form method="get" action="user.jsp">
+                  <input type="hidden" name="action" value="delete"/>
+                  <input type="hidden" name="email" value="<%= account.getEmail() %>"/>
+                  <button type="submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          <% } %>
+          <tr>
+            <td></td>
+            <td class="text-gray col-span-4 justify-left text-md">
+              <a onclick="add_user.showModal()" class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus mr-2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                Add new user
+              </a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
       </div>
     </div>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        <% if (editingAccount != null && editingAccount.getId() != 0) { %>
+        <% if (editingAccount != null && editingAccount.getId() != 0 && !action.equals("delete")) { %>
         edit_user.showModal();
+        <% } %>
+
+        <% if (action.equals("delete")) { %>
+        delete_user.showModal();
         <% } %>
       });
 
