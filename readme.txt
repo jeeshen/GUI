@@ -19,8 +19,7 @@ It follows standard **Java EE architecture** with **Servlets** and **JSP**, and 
   - SDK: Java 21  
 - **Server:** Apache Tomcat 11.0.5  
 - **IDE:** IntelliJ IDEA  
-- **Database:** MySQL
-
+- **Database:** MySQL (MySQL Workbench)
 ---
 
 ## 🗃️ Database Setup
